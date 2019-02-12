@@ -9,6 +9,7 @@
   "author": "arpa",
   "license": "ISC",
   "dependencies": {
-    "lit-html": "^1.0.0"
+    "lit-html": "^1.0.0",
+    "normalize.css": "^8.0.1"
   }
 }
