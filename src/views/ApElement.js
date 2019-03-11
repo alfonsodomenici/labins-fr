@@ -1,4 +1,4 @@
-import { render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 
 export default class ApElement extends HTMLElement {
 
@@ -8,6 +8,23 @@ export default class ApElement extends HTMLElement {
     }
 
     changeView() {
-        render(this.createView(), this.root);
+        render(this.loadView(), this.root);
+    }
+
+    loadView(){
+        return html`
+            <style>
+                ${this.createStyle()}
+            </style>
+            ${this.createView()}
+        `;
+    }
+
+    createStyle(){
+        throw new Error("abstract method call");
+    }
+
+    createView(){
+        throw new Error("abstract method call");
     }
 }

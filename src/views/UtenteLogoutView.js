@@ -13,9 +13,15 @@ export default class UtenteLogoutView extends ApElement {
 
     createView() {
         return html`
-            <input placeholder='data...'/>
-            <button >save</button>
+        <form class="pure-form pure-form-aligned">
+            <input type="text" placeholder='data...'/>
+            <button class="pure-button ">save</button>
+        </form>
         `;
+    }
+
+    createStyle(){
+        return html`@import url("./../pure.css")`;
     }
 
 }
