@@ -1,5 +1,5 @@
 import ApElement from "./ApElement.js";
-import { html } from "./../../node_modules/lit-html/lit-html.js"
+import { html } from "./../lit-html.js"
 import SharedStyle from "../sharedStyle.js";
 
 export default class UtenteLoginView extends ApElement{
