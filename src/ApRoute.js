@@ -13,12 +13,14 @@ export default class ApRoute extends HTMLElement {
     onNavigation(e) {
         const { detail } = e;
         const link = detail.link;
-        this.loadView(link);
+        const params = detail.params;
+        this.loadView(link,params);
     }
 
-    async loadView(link){
+    async loadView(link,params){
         const {default: View} = await import(`./views/${link}View.js`)
-        let newChild = new View();
+        let newChild = new View(params);
+        //newChild.params = params; 
         if (this.oldChild) {
             this.root.replaceChild(newChild, this.oldChild);
         } else {

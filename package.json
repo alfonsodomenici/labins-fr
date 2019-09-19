@@ -10,5 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "lit-html": "^1.0.0"
+  },
+  "devDependencies": {
+    "@pika/web": "^0.4.3"
+  },
+  "@pika/web": {
+    "webDependencies": [
+      "lit-html"
+    ]
   }
 }

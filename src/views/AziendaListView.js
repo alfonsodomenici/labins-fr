@@ -1,7 +1,7 @@
-import ApElement from "./ApElement.js";
-import { html } from "./../lit-html.js"
+import ApElementView from "./ApElementView.js";
+import { html } from "./../../node_modules/lit-html/lit-html.js"
 
-export default class AziendaListView extends ApElement {
+export default class AziendaListView extends ApElementView {
 
     constructor() {
         super();
@@ -15,6 +15,10 @@ export default class AziendaListView extends ApElement {
         return html`
             <p>Elenco Aziende</p>
         `;
+    }
+
+    createStyle() {
+        return html``;
     }
 }
 customElements.define('azienda-list', AziendaListView);

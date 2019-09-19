@@ -30,7 +30,8 @@ export default class ApNav extends HTMLElement {
         const event = new CustomEvent(
             'ap-navigation', {
                 detail: {
-                    link: hash.substring(1)
+                    link: hash.substring(1),
+                    src: 'mainnav'
                 },
                 bubbles: true
             }

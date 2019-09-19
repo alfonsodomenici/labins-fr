@@ -1,12 +1,13 @@
-import ApElement from "./ApElement.js";
-import { html } from "./../lit-html.js"
+import ApElementView from "./ApElementView.js";
+import { html } from "./../../node_modules/lit-html/lit-html.js"
+import ApElementView from "./ApElementView.js";
 
-export default class ApparecchiaturaCreateView extends ApElement {
+export default class ApparecchiaturaCreateView extends ApElementView {
 
     constructor() {
         super();
     }
-    
+
     connectedCallback() {
         this.changeView();
     }
@@ -18,5 +19,8 @@ export default class ApparecchiaturaCreateView extends ApElement {
         `;
     }
 
+    createStyle() {
+        return html``;
+    }
 }
 customElements.define('apparecchiatura-create', ApparecchiaturaCreateView);

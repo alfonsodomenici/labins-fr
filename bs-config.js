@@ -15,7 +15,10 @@
 module.exports = {
     "files": ["src"],
     "server": {
-        baseDir: "src"
+        baseDir: "src",
+        routes: {
+            "/node_modules": "node_modules"
+        }
     },
     "browser": "chromium",
     "cors": false,

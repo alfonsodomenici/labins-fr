@@ -1,4 +1,4 @@
-import { html, render } from "./../lit-html.js";
+import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 
 export default class ApElement extends HTMLElement {
 
@@ -11,20 +11,25 @@ export default class ApElement extends HTMLElement {
         render(this.loadView(), this.root);
     }
 
-    loadView(){
+    loadView() {
         return html`
             <style>
-                ${this.createStyle()}
-            </style>
-            ${this.createView()}
+                @import url(./../pure.css);
+                :host{
+                    all: initial;
+                    display:block;
+                }  
+                ${ this.createStyle()}
+            </style >
+            ${ this.createView()}
         `;
     }
 
-    createStyle(){
+    createStyle() {
         throw new Error("abstract method call");
     }
 
-    createView(){
+    createView() {
         throw new Error("abstract method call");
     }
 }
