@@ -1,24 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
+import ApElementView from "./ApElementView.js";
+import { html } from "./../../node_modules/lit-html/lit-html.js";
+import ApparecchiaturaService from "./../services/ApparecchiaturaService.js";
+import DominioService from "./../services/DominioService.js";
+import AziendaService from "./../services/AziendaService.js";
+import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService.js";
+import LaboratorioService from "./../services/LaboratorioService.js";
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
-        integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
-</head>
+export default class ApparecchiaturaUpdateView extends ApElementView {
 
-<body>
-    <section>
+    constructor(params) {
+        super(params);
+        this.service = new ApparecchiaturaService(params);
+        this.labService = new LaboratorioService(params);
+        this.domService = new DominioService(params);
+        this.azService = new AziendaService();
+        this.tappService = new TipoApperecchiaturaService(params);
+    }
 
-        <header>
-            <p>title</p>
-        </header>
+
+    connectedCallback() {
+        Promise.all([
+            this.labService.all(),
+            this.domService.all(),
+            this.tappService.all(),
+            this.azService.all(),
+            this.service.find(this.params.id)
+        ]).then(values => {
+            this.laboratori = values[0].laboratori;
+            this.domini = values[1];
+            this.tipi = values[2];
+            this.aziende = values[3].aziende;
+            this.data = values[4];
+            this.changeView();
+        }
+        );
+    }
+
+
+    createView() {
+        return html`
+        <form class="pure-form pure-form-stacked">
         <div class="pure-g">
+            <div class="pure-u-1">
+                <div class="pure-g">
+                    <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <label>
+                            <span class="label">Codice</span>
+                            <span class="content">${this.data.codice}</span>
+                        </label>
+                    </div>
+                    <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <label>
+                            <span class="label">Descrizione</span>
+                            <span class="content">${this.data.descrizione}</span>
+                        </label>
+                    </div>
+                    <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <label>
+                            <span class="label">Matricola</span>
+                            <span class="content">${this.data.matricola}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div class="pure-u-1 pure-u-md-1-2">
                 <fieldset>
                     <legend>Ubicazione</legend>
@@ -26,27 +70,28 @@
                         <div class="pure-u-1 pure-u-md-1-2">
                             <label for="lab">Laboratorio</label>
                             <select id="lab" class="pure-input-1-2">
-                                <option>AL</option>
-                                <option>CA</option>
-                                <option>IL</option>
+                                ${this.laboratori.map(v => html`<option value="${v.id}">${v.denominazione}</option value>`)}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
                             <label for="dom">Dominio</label>
                             <select id="dom" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.domini.map(v => html`<option value="${v.id}">${v.denominazione}</option value>`)}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
                             <label for="cat">Catena di misura</label>
                             <select id="cat" class="pure-input-1-2">
                                 <option value="-1"></option>
+
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
                             <label for="tipo">Tipologia</label>
                             <select id="tipo" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.tipi.map(p => html`<option value="${p.id}">${p.descrizione}</option value>`)}
                             </select>
                         </div>
                     </div>
@@ -116,12 +161,14 @@
                             <label for="costruttore">Costruttore</label>
                             <select id="costruttore" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.aziende.filter(e => e.costruttore).map(v => html`<option value="${v.id}">${v.denominazione}</option value>`)}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
                             <label for="distributore">Distributore</label>
                             <select id="distributore" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.aziende.filter(e => e.distributore).map(v => html`<option value="${v.id}">${v.denominazione}</option value>`)}
                             </select>
                         </div>
                     </div>
@@ -145,10 +192,13 @@
 
             </div>
         </div>
-        <footer>
-            <p>footer</p>
-        </footer>
-    </section>
-</body>
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+        `;
+    }
 
-</html>
+    createStyle() {
+        return html``;
+    }
+}
+customElements.define('apparecchiatura-update', ApparecchiaturaUpdateView);

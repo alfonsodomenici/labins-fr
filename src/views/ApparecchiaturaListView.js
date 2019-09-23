@@ -22,6 +22,9 @@ export default class ApparecchiaturaListView extends ApElementView {
                 cursor: pointer;
                 background: var(--hover-backgound-color,lightblue); 
             }
+            tr.selected{
+                background: var(--hover-backgound-color,lightblue);
+            }
         `;
     }
 
@@ -38,7 +41,7 @@ export default class ApparecchiaturaListView extends ApElementView {
         `;
     }
 
-    createDataView(data) {
+    createDataView() {
         return html`
        <h1>Elenco Apparecchiature</h1>
         <table  class="pure-table pure-table-bordered">
@@ -52,15 +55,19 @@ export default class ApparecchiaturaListView extends ApElementView {
                 <th>dominio</th>
             </thead>
             <tbody>
-                ${data.map(row => this.createRow(row))}
+                ${this.data.map(row => this.createRow(row))}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">
+                    <td colspan="3">
                         <paginator-uv count="${this.count}" 
                             page="${this.pageSize}"
                             @paginator=${e => this.onPageChange(e)}>
                         </paginator-uv>
+                    </td>
+                    <td colspan="4">
+                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>
+                        <button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary'>Dettagli</button>
                     </td>
                 </tr>
             </tfoot>
@@ -70,7 +77,7 @@ export default class ApparecchiaturaListView extends ApElementView {
 
     createRow({ id,codice,descrizione,tipologia,matricola,costruttore,laboratorio,dominio }) {
         return html`
-            <tr>
+            <tr row-key=${id} @click=${e => this.onRowClick(e,id)}>
                 <td>${codice}</td>
                 <td>${descrizione}</td>
                 <td>${tipologia ? tipologia.denominazione : ''}</td>
@@ -82,8 +89,18 @@ export default class ApparecchiaturaListView extends ApElementView {
        `;
     }
 
+    onRowClick(e,id){
+        this.selected = this.data.find(v => v.id === id);
+        this.params.id = id;
+        const old = this.root.querySelector("tr.selected");
+        const selRow = this.root.querySelector(`[row-key="${id}"]`);
+        if(old){
+            old.classList.toggle('selected');
+        }
+        selRow.classList.toggle('selected');
+    }
+
     onSearch(e) {
-        console.log("onSearch()..");
         this.detail = e.detail
         this.criteria = e.detail;
         this.criteria.start = 0;
@@ -101,8 +118,39 @@ export default class ApparecchiaturaListView extends ApElementView {
         this.service.search(this.criteria)
             .then(json => {
                 this.count = json.size;
-                render(this.createDataView(json.apparecchiature), this.root.getElementById('container'));
+                this.data = json.apparecchiature;
+                render(this.createDataView(), this.root.getElementById('container'));
             })
+    }
+
+    onCreate(e){
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'ApparecchiaturaCreate',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
+    onViewDetail(e){
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'Apparecchiatura',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
     }
 }
 customElements.define('apparecchiatura-list', ApparecchiaturaListView);

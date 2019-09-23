@@ -15,8 +15,10 @@ export default class ApElement extends HTMLElement {
         return html`
             <style>
                 @import url(./../pure.css);
+                @import url(./../grids-responsive.css);
+                @import url(./../style.css);
                 :host{
-                    all: initial;
+                    /*all: initial;*/
                     display:block;
                 }  
                 ${ this.createStyle()}

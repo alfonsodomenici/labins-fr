@@ -15,4 +15,22 @@ export default class ApparecchiaturaService extends AbstractService{
         });
         return await resp.json();
     }
+
+    async find (id){
+        const resp = await fetch(`${this.url}/${id}`, {
+            method: 'GET',
+            headers: this.headers
+        });
+        return await resp.json();
+    }
+
+    async save (apparecchiatura){
+        this.headers.set('Content-Type','application/json')
+        const resp = await fetch(`${this.url}`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(apparecchiatura)    
+        });
+        return await resp.json();
+    }
 }

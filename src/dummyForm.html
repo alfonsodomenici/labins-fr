@@ -1,13 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="pure.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Dettaglio Apparecchiatura</title>
 </head>
+
 <body>
-    
+    <form class="pure-form pure-form-stacked">
+        <div class="pure-g">
+            <div class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                    <legend>Ubicazione</legend>
+                    <div class="pure-g">
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="lab">Laboratorio</label>
+                            <select id="lab" class="pure-input-1-2">
+                                <option>AL</option>
+                                <option>CA</option>
+                                <option>IL</option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="dom">Dominio</label>
+                            <select id="dom" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="cat">Catena di misura</label>
+                            <select id="cat" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="tipo">Tipologia</label>
+                            <select id="tipo" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                    <legend>Campo di misura</legend>
+
+                    <div class="pure-g">
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="grandezza">Grandezza</label>
+                            <select id="grandezza" class="pure-input-1-2">
+                                <option>AL</option>
+                                <option>CA</option>
+                                <option>IL</option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="cop">Campo operativo</label>
+                            <input id="cop" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="min">Min</label>
+                            <input id="min" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="max">Max</label>
+                            <input id="max" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="um">Unita di Misura</label>
+                            <select id="um" class="pure-input-1-2">
+                                <option>AL</option>
+                                <option>CA</option>
+                                <option>IL</option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="incer">Incertezza</label>
+                            <input id="incer" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="ca">Criterio Accettazione</label>
+                            <input id="ca" class="pure-u-23-24" type="text">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                    <legend>Info sull'acquisto</legend>
+                    <div class="pure-g">
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="dFabbricazione">Data fabbricazione</label>
+                            <input id="dFabbricazione" class="pure-u-23-24" type="date">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="dAcquisto">Data acquisto</label>
+                            <input id="dAcquisto" class="pure-u-23-24" type="date">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="dInFunzione">Entrata in funzione</label>
+                            <input id="dInFunzione" class="pure-u-23-24" type="date">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="costruttore">Costruttore</label>
+                            <select id="costruttore" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="distributore">Distributore</label>
+                            <select id="distributore" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                    <legend>Flags</legend>
+                    <div class="pure-u-1">
+                        <label for="taratura" class="pure-checkbox">
+                            <input id="taratura" type="checkbox"> Soggetto a taratura
+                        </label>
+                        <label for="manutenzione" class="pure-checkbox">
+                            <input id="manutenzione" type="checkbox"> Soggetto a manutenzione
+                        </label>
+                        <label for="appr" class="pure-checkbox">
+                            <input id="appr" type="checkbox"> Apparecchiatura di riferimento
+                        </label>
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+    </form>
+
 </body>
+
 </html>

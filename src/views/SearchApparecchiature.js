@@ -3,13 +3,12 @@ import DominioService from "./../services/DominioService.js";
 import AziendaService from "./../services/AziendaService.js";
 import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js";
+import ApElement from "../ApElement.js";
 
-
-export default class SearchApparecchiature extends HTMLElement {
+export default class SearchApparecchiature extends ApElement {
 
     constructor() {
         super();
-        this.root = this.attachShadow({ mode: 'open' });
         this.oldSearch = {};
     }
 
@@ -21,64 +20,91 @@ export default class SearchApparecchiature extends HTMLElement {
         Promise.all([
             this.domService.all(),
             this.tappService.all(),
-            this.azService.searchByTipo('costruttore'),
-            this.azService.searchByTipo('distributore'),
-            this.azService.searchByTipo('manutentore'),
-            this.azService.searchByTipo('taratore'),
+            this.azService.all()
         ]).then(values => {
             this.domini = values[0];
             this.tipi = values[1];
-            this.costruttori = values[2];
-            this.distributori = values[3];
-            this.manutentori = values[4];
-            this.taratori = values[5];
-            render(this.createView(), this.root);
+            this.aziende = values[2].aziende;
+            this.changeView();
         }
         );
     }
 
+    createStyle() {
+        return html``;
+    }
+
     createView() {
         return html`
-                <form method="POST" @submit=${e => this.onsearch(e)} class='pure-form'>
-                    <legend>Parametri Ricerca</legend>
-                    <label>Dominio    
-                        <select name="dominio">
-                        <option value='-1' >nessun dominio</option>
-                        ${this.domini.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}                        
-                        </select>
-                    </label>
-                    <label>Tipo    
-                        <select name="tipo">
-                        <option value='-1' >nessun tipo</option>
-                        ${this.tipi.map(p => html`<option value="${p.id}">${p.descrizione}</option value>`)}                        
-                        </select>
-                    </label>
-                    <label>Costruttore    
-                        <select name="costruttore">
-                        <option value='-1' >nessun costruttore</option>
-                        ${this.costruttori.aziende.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}                        
-                        </select>
-                    </label>
-                    <label>Distributore    
-                        <select name="distributore">
-                        <option value='-1' >nessun distributore</option>
-                        ${this.distributori.aziende.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}                        
-                        </select>
-                    </label>
-                    <label>Manutentore    
-                        <select name="manutentore">
-                        <option value='-1' >nessun manutentore</option>
-                        ${this.manutentori.aziende.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}                        
-                        </select>
-                    </label>
-                    <label>Taratore    
-                        <select name="taratore">
-                        <option value='-1' >nessun taratore</option>
-                        ${this.taratori.aziende.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}                        
-                        </select>
-                    </label>
+                <form method="POST" @submit=${e => this.onsearch(e)} class='pure-form pure-form-stacked'>
+
+                    <fieldset>
+                        <legend>Parametri Ricerca</legend>
+            
+                        <div class="pure-g">
+            
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <label>Dominio
+                                    <select name="dominio">
+                                        <option value='-1'>nessun dominio</option>
+                                        ${this.domini.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <label>Tipo
+                                    <select name="tipo">
+                                        <option value='-1'>nessun tipo</option>
+                                        ${this.tipi.map(p => html`<option value="${p.id}">${p.descrizione}</option value>`)}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <label>Costruttore
+                                    <select name="costruttore">
+                                        <option value='-1'>nessun costruttore</option>
+                                        ${this.aziende.filter(e => e.costruttore).map(p => html`<option value="${p.id}">${p.denominazione}</option
+                                            value>
+                                        `)}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <label>Distributore
+                                    <select name="distributore">
+                                        <option value='-1'>nessun distributore</option>
+                                        ${this.aziende.filter(e => e.distributore).map(p => html`<option value="${p.id}">${p.denominazione}</option
+                                            value>
+                                        `)}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <label>Manutentore
+                                    <select name="manutentore">
+                                        <option value='-1'>nessun manutentore</option>
+                                        ${this.aziende.filter(e => e.manutentore).map(p => html`<option value="${p.id}">${p.denominazione}</option
+                                            value>
+                                        `)}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <label>Taratore
+                                    <select name="taratore">
+                                        <option value='-1'>nessun taratore</option>
+                                        ${this.aziende.filter(e => e.taratore).map(p => html`<option value="${p.id}">${p.denominazione}</option
+                                            value>
+                                        `)}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="pure-u-1 pure-u-md-4-24">
+                                <input type="submit" class='pure-button pure-button-primary' value="Cerca" />
+                            </div>
+                        </div>
+                    </fieldset>
                     
-                    <input type="submit" class='pure-button pure-button-primary' value="Cerca" />
                 </form>
         `;
     }
