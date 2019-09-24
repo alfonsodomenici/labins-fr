@@ -68,6 +68,7 @@ export default class ApparecchiaturaListView extends ApElementView {
                     <td colspan="4">
                         <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>
                         <button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary'>Dettagli</button>
+                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>
                     </td>
                 </tr>
             </tfoot>
@@ -75,9 +76,9 @@ export default class ApparecchiaturaListView extends ApElementView {
         `;
     }
 
-    createRow({ id,codice,descrizione,tipologia,matricola,costruttore,laboratorio,dominio }) {
+    createRow({ id, codice, descrizione, tipologia, matricola, costruttore, laboratorio, dominio }) {
         return html`
-            <tr row-key=${id} @click=${e => this.onRowClick(e,id)}>
+            <tr row-key=${id} @click=${e => this.onRowClick(e, id)}>
                 <td>${codice}</td>
                 <td>${descrizione}</td>
                 <td>${tipologia ? tipologia.denominazione : ''}</td>
@@ -89,12 +90,12 @@ export default class ApparecchiaturaListView extends ApElementView {
        `;
     }
 
-    onRowClick(e,id){
+    onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
         this.params.id = id;
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
-        if(old){
+        if (old) {
             old.classList.toggle('selected');
         }
         selRow.classList.toggle('selected');
@@ -123,7 +124,7 @@ export default class ApparecchiaturaListView extends ApElementView {
             })
     }
 
-    onCreate(e){
+    onCreate(e) {
         e.preventDefault();
         const event = new CustomEvent(
             'ap-navigation', {
@@ -138,7 +139,7 @@ export default class ApparecchiaturaListView extends ApElementView {
         this.dispatchEvent(event);
     }
 
-    onViewDetail(e){
+    onViewDetail(e) {
         e.preventDefault();
         const event = new CustomEvent(
             'ap-navigation', {
@@ -151,6 +152,17 @@ export default class ApparecchiaturaListView extends ApElementView {
         }
         );
         this.dispatchEvent(event);
+    }
+
+    onDelete(e) {
+        e.preventDefault();
+        console.log('ondelete...');
+        this.service.delete(this.params.id).then(_ => {
+            this.selected = null;
+            this.params.id = null;
+            this.loadData();
+        });
+
     }
 }
 customElements.define('apparecchiatura-list', ApparecchiaturaListView);

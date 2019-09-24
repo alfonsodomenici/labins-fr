@@ -1,10 +1,10 @@
 import AbstractService from './AbstractService.js';
 
-export default class LaboratorioService extends AbstractService{
+export default class GrandezzaService extends AbstractService{
 
     constructor(){
-       super();
-       this.url += '/laboratori';
+        super();
+        this.url += '/grandezze';
     }
 
     async all() {

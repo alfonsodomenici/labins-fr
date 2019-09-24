@@ -1,17 +1,45 @@
 import ApElementView from "./ApElementView.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
 import ApparecchiaturaService from "./../services/ApparecchiaturaService.js";
+import GrandezzaService from "../services/GrandezzaService.js";
+import UnitaMisuraService from "../services/UnitaMisuraService.js";
+import DominioService from "./../services/DominioService.js";
+import AziendaService from "./../services/AziendaService.js";
+import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService.js";
+import LaboratorioService from "./../services/LaboratorioService.js";
 
 export default class ApparecchiaturaCreateView extends ApElementView {
 
     constructor(params) {
         super(params);
         this.service = new ApparecchiaturaService(params);
+        this.domService = new DominioService(params);
+        this.azService = new AziendaService();
+        this.tappService = new TipoApperecchiaturaService(params);
+        this.grandezzaService = new GrandezzaService();
+        this.umService = new UnitaMisuraService();
+        this.labService = new LaboratorioService();
     }
 
     connectedCallback() {
-        this.changeView();
-        this.databind();
+        Promise.all([
+            this.domService.all(),
+            this.tappService.all(),
+            this.azService.all(),
+            this.grandezzaService.all(),
+            this.umService.all(),
+            this.labService.all()
+        ]).then(values => {
+            this.domini = values[0];
+            this.tipi = values[1];
+            this.aziende = values[2].aziende;
+            this.grandezze = values[3];
+            this.um = values[4];
+            this.laboratori = values[5].laboratori;
+            this.changeView();
+            this.bindUi();
+        }
+        );
     }
 
     onsave(e) {
@@ -25,31 +53,11 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         fields.filter(v => v.includes('Select')).forEach(v => {
             Reflect.set(entity, v.replace('Select', ''), this.readSelectValue(Reflect.get(this, v)));
         });
-        console.log(JSON.stringify(entity));
-        this.service.save(entity)
-            .then(json => console.log(json));
+        this.service.create(entity)
+            .then(msg => console.log(msg));
     }
 
-    readInputValue(input) {
-        if (!input) {
-            return null;
-        }
-        if (input.type === 'text') {
-            return input.value;
-        } else if (input.type === 'number') {
-            return input.value ? input.value : null;
-        } else if (input.type === 'date') {
-            return input.value ? input.value : null;
-        }
-    }
-
-    readSelectValue(select) {
-        if (!select) {
-            return null;
-        }
-        console.log(typeof select.value);
-        return select.value ? { id: Number(select.value) } : null;
-    }
+    
     createView() {
         return html`
         <form class="pure-form pure-form-stacked">
@@ -75,9 +83,16 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                     <legend>Ubicazione</legend>
                     <div class="pure-g">
                         <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="lab">Laboratorio</label>
+                            <select id="lab" class="pure-input-1-2" disabled>
+                                ${this.laboratori.map(v => this.renderOptions(v, this.params.idLab))}
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
                             <label for="dominio">Dominio</label>
                             <select id="dominio" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.domini.map(v => this.renderOptions(v))}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
@@ -90,6 +105,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                             <label for="tipologia">Tipologia</label>
                             <select id="tipologia" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.tipi.map(v => this.renderOptions(v))}
                             </select>
                         </div>
                     </div>
@@ -103,9 +119,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                             <label for="grandezza">Grandezza</label>
                             <select id="grandezza" class="pure-input-1-2">
                                 <option value="-1"></option>
-                                <option>AL</option>
-                                <option>CA</option>
-                                <option>IL</option>
+                                ${this.grandezze.map(v => this.renderOptions(v))}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
@@ -124,9 +138,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                             <label for="um">Unita di Misura</label>
                             <select id="um" class="pure-input-1-2">
                                 <option value="-1"></option>
-                                <option>AL</option>
-                                <option>CA</option>
-                                <option>IL</option>
+                                ${this.um.map(v => this.renderOptions(v))}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
@@ -160,12 +172,14 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                             <label for="costruttore">Costruttore</label>
                             <select id="costruttore" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.aziende.filter(v => v.costruttore).map(v => this.renderOptions(v))}
                             </select>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-2">
                             <label for="distributore">Distributore</label>
                             <select id="distributore" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.aziende.filter(v => v.distributore).map(v => this.renderOptions(v))}
                             </select>
                         </div>
                     </div>
@@ -197,7 +211,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         return html``;
     }
 
-    databind() {
+    bindUi() {
         this.codiceInput = this.root.querySelector('#codice');
         this.descrizioneInput = this.root.querySelector('#descrizione');
         this.matricolaInput = this.root.querySelector('#matricola');

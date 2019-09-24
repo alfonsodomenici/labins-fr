@@ -213,7 +213,6 @@ export default class ApparecchiaturaView extends ApElementView {
             </section>
             <footer class="pure-u-1">
                 <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modica</button>
-                <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>
                 <button  @click=${e => this.onDocumenti(e)} class='pure-button pure-button-primary'>Documenti</button>
                 <button  @click=${e => this.onStorico(e)} class='pure-button pure-button-primary'>Storico</button>
                 <button  @click=${e => this.onFuoriServizio(e)} class='pure-button pure-button-primary'>Fuori Servizio</button>
