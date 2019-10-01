@@ -6,7 +6,23 @@ export default class ApElementView extends ApElement {
     constructor(params) {
         super();
         this.params = params;
+        this.pageSize = 10;
         console.log(params);
+    }
+
+    dataToUi(data) {
+        this.fields = Array.from(this.root.querySelectorAll('[data-bind]'));
+        if (data) {
+            this.fields.forEach(v => {
+                Reflect.set(v, 'value', Reflect.get(data, v.dataset.bind));
+            });
+        }
+    }
+
+    uiToData(data){
+        this.fields.forEach(v => {
+            Reflect.set(data, v.dataset.bind, this.readInputValue(v));
+        });
     }
 
     renderCheckbox(id, value, label) {

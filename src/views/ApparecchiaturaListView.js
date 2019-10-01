@@ -9,7 +9,6 @@ export default class ApparecchiaturaListView extends ApElementView {
     constructor(params) {
         super(params);
         this.service = new ApparecchiaturaService(params);
-        this.pageSize = 10;
     }
 
     connectedCallback() {
