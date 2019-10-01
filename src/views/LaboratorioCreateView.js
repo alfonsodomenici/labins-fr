@@ -11,16 +11,14 @@ export default class LaboratorioCreateView extends ApElementView {
 
     connectedCallback() {
         this.changeView();
-        this.bindUi();
+        this.dataToUi();
     }
 
     onsave(e) {
         e.preventDefault();
         const inputs = this.fields.filter(v => v instanceof HTMLInputElement)
         const entity = {};
-        this.fields.forEach(v => {
-            Reflect.set(entity, v.dataset.bind, this.readInputValue(v));
-        });
+        this.uiToData(entity);
         this.service.create(entity)
             .then(msg => console.log(msg));
 
@@ -43,10 +41,6 @@ export default class LaboratorioCreateView extends ApElementView {
 
     createStyle() {
         return html``;
-    }
-
-    bindUi() {
-        this.fields = Array.from(this.root.querySelectorAll('[data-bind]'));
     }
 
 
