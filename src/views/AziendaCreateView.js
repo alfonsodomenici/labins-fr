@@ -17,7 +17,6 @@ export default class AziendaCreateView extends ApElementView {
 
     onsave(e) {
         e.preventDefault();
-        const inputs = this.fields.filter(v => v instanceof HTMLInputElement)
         const entity = {};
         this.uiToData(entity);
         console.log(entity);

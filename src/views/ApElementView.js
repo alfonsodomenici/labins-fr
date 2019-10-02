@@ -14,15 +14,23 @@ export default class ApElementView extends ApElement {
         this.fields = Array.from(this.root.querySelectorAll('[data-bind]'));
         if (data) {
             this.fields.forEach(v => {
-                this.writeInputValue(v,Reflect.get(data, v.dataset.bind));
+                if (v instanceof HTMLInputElement) {
+                    this.writeInputValue(v, Reflect.get(data, v.dataset.bind));
+                } else if (v instanceof HTMLSelectElement) {
+                    this.writeSelectValue(v, Reflect.get(data, v.dataset.bind));
+                }
             });
         }
     }
 
-    uiToData(data){
+    uiToData(data) {
         this.fields.forEach(v => {
             console.dir(v)
-            Reflect.set(data, v.dataset.bind, this.readInputValue(v));
+            if (v instanceof HTMLInputElement) {
+                Reflect.set(data, v.dataset.bind, this.readInputValue(v));
+            } else if (v instanceof HTMLSelectElement) {
+                Reflect.set(data, v.dataset.bind, this.readSelectValue(v));
+            }
         });
     }
 
@@ -55,7 +63,7 @@ export default class ApElementView extends ApElement {
         if (!input) {
             return null;
         }
-        if (input.type === 'text' || input.type === 'textarea' || input.type === 'email' ) {
+        if (input.type === 'text' || input.type === 'textarea' || input.type === 'email') {
             return input.value;
         } else if (input.type === 'number') {
             return input.value ? input.value : null;
@@ -67,6 +75,17 @@ export default class ApElementView extends ApElement {
         }
     }
 
+    writeInputValue(input, value) {
+        if (!input) {
+            return;
+        }
+        if (input.type === 'checkbox') {
+            input.checked = value;
+        } else {
+            input.value = value;
+        }
+    }
+
     readSelectValue(select) {
         if (!select) {
             return null;
@@ -75,14 +94,10 @@ export default class ApElementView extends ApElement {
         return select.value ? { id: Number(select.value) } : null;
     }
 
-    writeInputValue(input,value){
-        if (!input) {
-            return ;
+    writeSelectValue(select, value) {
+        if (!select) {
+            return;
         }
-        if (input.type === 'checkbox') {
-            input.checked = value;
-        }else {
-            input.value = value;
-        }
+        select.value = value ? value.id : null;
     }
 }
