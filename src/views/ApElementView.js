@@ -14,13 +14,14 @@ export default class ApElementView extends ApElement {
         this.fields = Array.from(this.root.querySelectorAll('[data-bind]'));
         if (data) {
             this.fields.forEach(v => {
-                Reflect.set(v, 'value', Reflect.get(data, v.dataset.bind));
+                this.writeInputValue(v,Reflect.get(data, v.dataset.bind));
             });
         }
     }
 
     uiToData(data){
         this.fields.forEach(v => {
+            console.dir(v)
             Reflect.set(data, v.dataset.bind, this.readInputValue(v));
         });
     }
@@ -54,13 +55,12 @@ export default class ApElementView extends ApElement {
         if (!input) {
             return null;
         }
-        if (input.type === 'text') {
+        if (input.type === 'text' || input.type === 'textarea' || input.type === 'email' ) {
             return input.value;
         } else if (input.type === 'number') {
             return input.value ? input.value : null;
         } else if (input.type === 'checkbox') {
-            console.log(input.value);
-            return input.value && input.value === 'on' ? true : false;
+            return input.checked;
         }
         else if (input.type === 'date') {
             return input.value ? input.value : null;
@@ -73,5 +73,16 @@ export default class ApElementView extends ApElement {
         }
         console.log(typeof select.value);
         return select.value ? { id: Number(select.value) } : null;
+    }
+
+    writeInputValue(input,value){
+        if (!input) {
+            return ;
+        }
+        if (input.type === 'checkbox') {
+            input.checked = value;
+        }else {
+            input.value = value;
+        }
     }
 }
