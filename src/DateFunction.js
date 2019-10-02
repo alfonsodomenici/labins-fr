@@ -7,4 +7,8 @@ export default class DateFunction {
     static numbers(n) {
         return n<10 ? `0${n}` : n;
     }
+
+    static isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
 }

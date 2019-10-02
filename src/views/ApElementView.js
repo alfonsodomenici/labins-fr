@@ -1,5 +1,6 @@
 import ApElement from "./../ApElement.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
+import DateFunction from "./../DateFunction.js";
 
 export default class ApElementView extends ApElement {
 
@@ -15,9 +16,9 @@ export default class ApElementView extends ApElement {
         if (data) {
             this.fields.forEach(v => {
                 if (v instanceof HTMLInputElement) {
-                    this.writeInputValue(v, Reflect.get(data, v.dataset.bind));
+                    this.writeInputValue(v, this.getVal(data, v.dataset.bind));
                 } else if (v instanceof HTMLSelectElement) {
-                    this.writeSelectValue(v, Reflect.get(data, v.dataset.bind));
+                    this.writeSelectValue(v, this.getVal(data, v.dataset.bind));
                 }
             });
         }
@@ -27,11 +28,34 @@ export default class ApElementView extends ApElement {
         this.fields.forEach(v => {
             console.dir(v)
             if (v instanceof HTMLInputElement) {
-                Reflect.set(data, v.dataset.bind, this.readInputValue(v));
+                //Reflect.set(data, v.dataset.bind, this.readInputValue(v));
+                this.setVal(data, this.readInputValue(v), v.dataset.bind)
             } else if (v instanceof HTMLSelectElement) {
-                Reflect.set(data, v.dataset.bind, this.readSelectValue(v));
+                //Reflect.set(data, v.dataset.bind, this.readSelectValue(v));
+                this.setVal(data, this.readSelectValue(v), v.dataset.bind)
             }
         });
+    }
+
+    /**
+     * 
+     * @param {*} object 
+     * @param {*} path 
+     */
+    getVal(object, path) {
+        return path.split('.').reduce((res, prop) => (res && res[prop]) ? res[prop] : null, object);
+    }
+
+    setVal(object = {}, value, path) {
+        const [head, ...rest] = path.toString().split('.');
+        if (!rest.length) {
+            object[head] = value
+        } else {
+            if (!object[head]) {
+                object[head] = {};
+            }
+            this.setVal(object[head], value, rest);
+        }
     }
 
     renderCheckbox(id, value, label) {
@@ -90,8 +114,7 @@ export default class ApElementView extends ApElement {
         if (!select) {
             return null;
         }
-        console.log(typeof select.value);
-        return select.value ? { id: Number(select.value) } : null;
+        return  select.value ? DateFunction.isNumeric(select.value) ? { id: Number(select.value) } : select.value : null;
     }
 
     writeSelectValue(select, value) {

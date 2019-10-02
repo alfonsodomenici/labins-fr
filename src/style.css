@@ -29,3 +29,13 @@ a{
 .group-view label span.content{
     font-style: oblique;
 }
+
+.visible {
+    /*visibility: visible;*/
+    display: block;
+  }
+  
+.not-visible {
+    /*visibility: hidden;*/
+    display: none;
+  }
