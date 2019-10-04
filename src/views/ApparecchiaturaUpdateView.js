@@ -1,5 +1,5 @@
 import ApElementView from "./ApElementView.js";
-import { html,render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import ApparecchiaturaService from "./../services/ApparecchiaturaService.js";
 import DominioService from "./../services/DominioService.js";
 import AziendaService from "./../services/AziendaService.js";
@@ -39,27 +39,14 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.grandezze = values[4];
             this.um = values[5];
             this.data = values[6];
+            this.taratura = this.data.taratura;
+            this.manutenzione = this.data.manutenzione;
             this.changeView();
-            this.initPanels();
             this.dataToUi(this.data);
         }
         );
     }
 
-    initPanels(){
-        const panelT = this.root.querySelector("#panelTaratura");
-        const panelM = this.root.querySelector("#panelManutenzione");
-        if(this.data.taratura){
-            console.log(this.data.taratura);
-            panelT.classList.toggle('visible');
-            panelT.classList.toggle('not-visible');
-        }
-        if(this.data.manutenzione){
-            console.log(this.data.manutenzione);
-            panelM.classList.toggle('visible');
-            panelM.classList.toggle('not-visible');
-        }
-    }
     onsave(e) {
         e.preventDefault();
         this.uiToData(this.data);
@@ -71,19 +58,13 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
     }
 
     onSoggettoTaratura(e) {
-        const panel = this.root.querySelector("#panelTaratura");
-        panel.classList.toggle('visible');
-        panel.classList.toggle('not-visible');
-        e.path[0].checked ? render(this.createTaraturaView(), panel) : render(html``, panel);
-        this.dataToUi();
+        this.taratura = e.path[0].checked;
+        this.changeView();
     }
 
     onSoggettoManutenzione(e) {
-        const panel = this.root.querySelector("#panelManutenzione");
-        panel.classList.toggle('visible');
-        panel.classList.toggle('not-visible');
-        e.path[0].checked ? render(this.createManutenzioneView(), panel) : render(html``, panel);
-        this.dataToUi();
+        this.manutenzione = e.path[0].checked;
+        this.changeView();
     }
 
     createView() {
@@ -235,12 +216,11 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                         </div>
                     </fieldset>
                 </div>
-                <div id="panelTaratura" class="pure-u-1 pure-u-md-1-2 not-visible">
-                    ${this.data.taratura ? this.createTaraturaView() : html``}
-                </div>
-                <div id="panelManutenzione" class="pure-u-1 pure-u-md-1-2 not-visible">
-                    ${this.data.manutenzione ? this.createManutenzioneView() : html``}
-                </div>
+                
+                ${this.taratura ? this.createTaraturaView() : html``}
+                
+                ${this.manutenzione ? this.createManutenzioneView() : html``}
+                
             </div>
             <input type="submit"  class="pure-button pure-button-primary" value="Salva" />
         </form>
@@ -253,81 +233,85 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
 
     createTaraturaView() {
         return html`
-            <fieldset>
-                <legend>Soggetto a Taratura</legend>
-                <div class="pure-g">
-                    <div class="pure-u-1">
-                        <label for="tipo">Tipo</label>
-                        <select id="tipo" data-bind="gestioneTaratura.tipo" class="pure-input-1-2">
-                            <option value="0">Temporale</option>
-                            <option value="1">Descrittiva</option>
-                            <option value="2">Prima dell'uso</option>
-                        </select>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                    <legend>Soggetto a Taratura</legend>
+                    <div class="pure-g">
+                        <div class="pure-u-1">
+                            <label for="tipo">Tipo</label>
+                            <select id="tipo" data-bind="gestioneTaratura.tipo" class="pure-input-1-2">
+                                <option value="0">Temporale</option>
+                                <option value="1">Descrittiva</option>
+                                <option value="2">Prima dell'uso</option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="dataPianificata">Data pianificata</label>
+                            <input id="dataPianificata" data-bind="gestioneTaratura.dataPianificata" class="pure-u-23-24" type="date">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="frequenza">Frequenza in gg</label>
+                            <input id="frequenza" data-bind="gestioneTaratura.freq" class="pure-u-23-24" type="number" min="1">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="descrizione">Descrizione</label>
+                            <input id="descrizione" data-bind="gestioneTaratura.descrizione" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="attivita">Attivita</label>
+                            <input id="attivita" data-bind="gestioneTaratura.attivita" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1">
+                            <label for="taratore">Taratore</label>
+                            <select id="taratore" data-bind="gestioneTaratura.azienda" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="dataPianificata">Data pianificata</label>
-                        <input id="dataPianificata" data-bind="gestioneTaratura.dataPianificata" class="pure-u-23-24" type="date">
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="frequenza">Frequenza in gg</label>
-                        <input id="frequenza" data-bind="gestioneTaratura.freq" class="pure-u-23-24" type="number" min="1">
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="descrizione">Descrizione</label>
-                        <input id="descrizione" data-bind="gestioneTaratura.descrizione" class="pure-u-23-24" type="text">
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="attivita">Attivita</label>
-                        <input id="attivita" data-bind="gestioneTaratura.attivita" class="pure-u-23-24" type="text">
-                    </div>
-                    <div class="pure-u-1">
-                        <label for="taratore">Taratore</label>
-                        <select id="taratore" data-bind="gestioneTaratura.azienda" class="pure-input-1-2">
-                            <option value="-1"></option>
-                        </select>
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
+            </div>
         `;
     }
 
     createManutenzioneView() {
         return html`
-            <fieldset>
-                <legend>Soggetto a Manutenzione</legend>
-                <div class="pure-g">
-                    <div class="pure-u-1">
-                        <label for="tipo">Tipo</label>
-                        <select id="tipo" data-bind="gestioneManutenzione.tipo" class="pure-input-1-2">
-                            <option value="0">Temporale</option>
-                            <option value="1">Descrittiva</option>
-                            <option value="2">Prima dell'uso</option>
-                        </select>
+            <div class="pure-u-1 pure-u-md-1-2">    
+                <fieldset>
+                    <legend>Soggetto a Manutenzione</legend>
+                    <div class="pure-g">
+                        <div class="pure-u-1">
+                            <label for="tipo">Tipo</label>
+                            <select id="tipo" data-bind="gestioneManutenzione.tipo" class="pure-input-1-2">
+                                <option value="0">Temporale</option>
+                                <option value="1">Descrittiva</option>
+                                <option value="2">Prima dell'uso</option>
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="dataPianificata">Data pianificata</label>
+                            <input id="dataPianificata" data-bind="gestioneManutenzione.dataPianificata" class="pure-u-23-24" type="date">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="frequenza">Frequenza in gg</label>
+                            <input id="frequenza" data-bind="gestioneManutenzione.freq" class="pure-u-23-24" type="number" min="1">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="descrizione">Descrizione</label>
+                            <input id="descrizione" data-bind="gestioneManutenzione.descrizione" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="attivita">Attivita</label>
+                            <input id="attivita" data-bind="gestioneManutenzione.attivita" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1">
+                            <label for="taratore">Manutentore</label>
+                            <select id="taratore" data-bind="gestioneManutenzione.azienda" class="pure-input-1-2">
+                                <option value="-1"></option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="dataPianificata">Data pianificata</label>
-                        <input id="dataPianificata" data-bind="gestioneManutenzione.dataPianificata" class="pure-u-23-24" type="date">
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="frequenza">Frequenza in gg</label>
-                        <input id="frequenza" data-bind="gestioneManutenzione.freq" class="pure-u-23-24" type="number" min="1">
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="descrizione">Descrizione</label>
-                        <input id="descrizione" data-bind="gestioneManutenzione.descrizione" class="pure-u-23-24" type="text">
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-2">
-                        <label for="attivita">Attivita</label>
-                        <input id="attivita" data-bind="gestioneManutenzione.attivita" class="pure-u-23-24" type="text">
-                    </div>
-                    <div class="pure-u-1">
-                        <label for="taratore">Manutentore</label>
-                        <select id="taratore" data-bind="gestioneManutenzione.azienda" class="pure-input-1-2">
-                            <option value="-1"></option>
-                        </select>
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
+            </div>
         `;
     }
 }

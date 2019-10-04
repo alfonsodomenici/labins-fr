@@ -10,12 +10,68 @@ export default class ApparecchiaturaView extends ApElementView {
     }
 
     connectedCallback() {
-        this.service.find(this.params.id)
-            .then(json => {
-                this.data = json;
-                console.log(this.data);
-                this.changeView();
-            })
+        Promise.all([
+            this.service.find(this.params.id),
+            this.service.findDocumenti(this.params.id)
+        ]).then(values => {
+            this.data = values[0];
+            this.documenti = values[1].documenti;
+            this.changeView();
+        }
+        );
+    }
+
+    onUpdate(e) {
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'ApparecchiaturaUpdate',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
+    onDocumentoView(e,doc){
+        e.preventDefault();
+        this.service.downloadDocumento(this.params.id,doc.id)
+        .then(blob => {
+            console.dir(blob)
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = doc.denominazione;
+            this.root.appendChild(a); 
+            a.click();
+            a.remove();
+        });
+    }
+
+    onDelete(e) {
+
+    }
+    onDocumenti(e) {
+
+    }
+    onStorico(e) {
+
+    }
+    onFuoriServizio(e) {
+
+    }
+
+    onDeroga(e) {
+
+    }
+    onVerificaIntermedia(e) {
+
+    }
+    onInServizio(e) {
+
     }
 
     createView() {
@@ -74,25 +130,7 @@ export default class ApparecchiaturaView extends ApElementView {
                     </div>
                 </div>
             </section>
-            <section class="pure-u-1 pure-u-md-1-2">
-                <div class="pure-g">
-                    <header class="pure-u-1">
-                        <h3>Gestione Taratura</h3>
-                    </header>
-                    <div class="pure-u-1 group-view">
-                        <label>
-                            <span class="label">Temporale</span>
-                            <span class="content">ab23qr</span>
-                        </label>
-                    </div>
-                    <div class="pure-u-1 group-view">
-                        <label>
-                            <span class="label">Taratore</span>
-                            <span class="content">ab23qr</span>
-                        </label>
-                    </div>
-                </div>
-            </section>
+
             <section class="pure-u-1 pure-u-md-1-2">
                 <div class="pure-g">
                     <header class="pure-u-1">
@@ -136,25 +174,7 @@ export default class ApparecchiaturaView extends ApElementView {
                     </div>
                 </div>
             </section>
-            <section class="pure-u-1 pure-u-md-1-2">
-                <div class="pure-g">
-                    <header class="pure-u-1">
-                        <h3>Gestione Manutenzione</h3>
-                    </header>
-                    <div class="pure-u-1 group-view">
-                        <label>
-                            <span class="label">Temporale</span>
-                            <span class="content">ab23qr</span>
-                        </label>
-                    </div>
-                    <div class="pure-u-1 group-view">
-                        <label>
-                            <span class="label">Tipo attivita</span>
-                            <span class="content">ab23qr</span>
-                        </label>
-                    </div>
-                </div>
-            </section>
+
             <section class="pure-u-1 pure-u-md-1-2">
                 <div class="pure-g">
                     <header class="pure-u-1">
@@ -192,25 +212,39 @@ export default class ApparecchiaturaView extends ApElementView {
                     </div>
                 </div>
             </section>
+
             <section class="pure-u-1 pure-u-md-1-2">
                 <div class="pure-g">
                     <header class="pure-u-1">
-                        <h3>Documentazione associata</h3>
+                        <h3>Flags</h3>
                     </header>
                     <div class="pure-u-1 group-view">
                         <label>
-                            <span class="label">Documenti</span>
-                            <span class="content">${this.data.documenti.length !== 0 ? this.data.documenti.toString() : ''}</span>
+                            <span class="label">Soggetta a Taratura</span>
+                            <span class="content">${this.data.taratura}</span>
+                        </label>
+                    </div>
+                    <div class="pure-u-1 group-view">
+                        <label>
+                            <span class="label">Soggetta a Manutenzione</span>
+                            <span class="content">${this.data.manutenzione}</span>
                         </label>
                     </div>
                     <div class="pure-u-1 group-view">
                         <label>
                             <span class="label">Apparecchiatura di riferimento</span>
-                            <span class="content">${this.data.riferimento ? this.data.riferimento : ''}</span>
+                            <span class="content">${this.data.riferimento}</span>
                         </label>
                     </div>
                 </div>
             </section>
+
+            ${this.createTaraturaView()}
+
+            ${this.createManutenzioneView()}
+            
+            ${this.createDocumentiView()}
+
             <footer class="pure-u-1">
                 <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modica</button>
                 <button  @click=${e => this.onDocumenti(e)} class='pure-button pure-button-primary'>Documenti</button>
@@ -224,45 +258,131 @@ export default class ApparecchiaturaView extends ApElementView {
         `;
     }
 
+    createTaraturaView(){
+        if(this.data.taratura){
+            return html`
+                <section class="pure-u-1 pure-u-md-1-2">
+                    <div class="pure-g">
+                        <header class="pure-u-1">
+                            <h3>Gestione Taratura</h3>
+                        </header>
+                        <div class="pure-u-1 group-view">
+                            <label>
+                                <span class="label">Tipo</span>
+                                <span class="content">${this.data.gestioneTaratura.tipo.denominazione}</span>
+                            </label>
+                        </div>
+                        
+                        ${this.createTipoGestioneView(this.data.gestioneTaratura)}
+
+                        <div class="pure-u-1 group-view">
+                            <label>
+                                <span class="label">Taratore</span>
+                                <span class="content">${this.data.gestioneTaratura.azienda}</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }else{
+            return html``;
+        }
+    }
+
+    createManutenzioneView(){
+        if(this.data.manutenzione){
+            return html`
+                <section class="pure-u-1 pure-u-md-1-2">
+                    <div class="pure-g">
+                        <header class="pure-u-1">
+                            <h3>Gestione Manutenzione</h3>
+                        </header>
+                        <div class="pure-u-1 group-view">
+                            <label>
+                                <span class="label">Tipo</span>
+                                <span class="content">${this.data.gestioneManutenzione.tipo.denominazione}</span>
+                            </label>
+                        </div>
+                        
+                        ${this.createTipoGestioneView(this.data.gestioneManutenzione,true)}
+
+                        <div class="pure-u-1 group-view">
+                            <label>
+                                <span class="label">Manutentore</span>
+                                <span class="content">${this.data.gestioneManutenzione.azienda}</span>
+                            </label>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }else{
+            return html``;
+        }
+    }
+
+    createTipoGestioneView(gest,flagManutenzione){
+        if(gest.tipo.denominazione === 'TEMPORALE'){
+            return html`
+                <div class="pure-u-1 group-view">
+                    <label>
+                        <span class="label">Data Pianificata</span>
+                        <span class="content">${gest.dataPianificata}</span>
+                    </label>
+                </div>
+                <div class="pure-u-1 group-view">
+                    <label>
+                        <span class="label">Frequenza</span>
+                        <span class="content">${gest.freq}</span>
+                    </label>
+                </div>
+            `;
+        }else if(gest.tipo.denominazione === 'DESCRITTIVA'){
+            return html`
+                <div class="pure-u-1 group-view">
+                    <label>
+                        <span class="label">Descrizione</span>
+                        <span class="content">${gest.descrizione}</span>
+                    </label>
+                </div>
+            `;
+        }
+        if(flagManutenzione){
+            return html`
+                <div class="pure-u-1 group-view">
+                    <label>
+                        <span class="label">Tipo Attivita</span>
+                        <span class="content">${gest.attivita}</span>
+                    </label>
+                </div>
+            `; 
+        }
+    }
+
+    createDocumentiView(){
+        if(this.documenti){
+            return html`
+                <section class="pure-u-1 pure-u-md-1-2">
+                    <div class="pure-g">
+                        <header class="pure-u-1">
+                            <h3>Documentazione associata</h3>
+                        </header>
+
+                        <div class="pure-u-1 group-view">
+                            <ul>
+                                ${this.documenti.map(d => html`<li><a @click=${e => this.onDocumentoView(e,d)} href="#">${d.denominazione}</a></li>`)}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }else{
+            return html``;
+        }
+    }
     createStyle() {
         return html``;
     }
 
-    onUpdate(e) {
-        e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'ApparecchiaturaUpdate',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
-    }
-    onDelete(e) {
-
-    }
-    onDocumenti(e) {
-
-    }
-    onStorico(e) {
-
-    }
-    onFuoriServizio(e) {
-
-    }
-
-    onDeroga(e) {
-
-    }
-    onVerificaIntermedia(e) {
-
-    }
-    onInServizio(e) {
-
-    }
+    
 }
 customElements.define('apparecchiatura-view', ApparecchiaturaView);

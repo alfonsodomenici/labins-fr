@@ -24,6 +24,22 @@ export default class ApparecchiaturaService extends AbstractService {
         return await resp.json();
     }
 
+    async findDocumenti(id) {
+        const resp = await fetch(`${this.url}/${id}/documenti`, {
+            method: 'GET',
+            headers: this.headers
+        });
+        return await resp.json();
+    }
+
+    async downloadDocumento(id,idDocumento) {
+        const resp = await fetch(`${this.url}/${id}/documenti/${idDocumento}/download`, {
+            method: 'GET',
+            headers: this.headers
+        });
+        return await resp.blob();
+    }
+
     async create(apparecchiatura) {
         try {
             this.headers.set('Content-Type', 'application/json');
