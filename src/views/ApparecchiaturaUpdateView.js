@@ -54,6 +54,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             .then(json => {
                 this.data = json;
                 this.changeView();
+                this.dataToUi(this.data);
             });
     }
 

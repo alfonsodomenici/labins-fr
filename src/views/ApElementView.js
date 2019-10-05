@@ -11,8 +11,12 @@ export default class ApElementView extends ApElement {
         console.log(params);
     }
 
-    dataToUi(data) {
+    changeView(){
+        super.changeView();
         this.fields = Array.from(this.root.querySelectorAll('[data-bind]'));
+    }
+        
+    dataToUi(data) {
         if (data) {
             this.fields.forEach(v => {
                 if (v instanceof HTMLInputElement) {
@@ -26,7 +30,7 @@ export default class ApElementView extends ApElement {
 
     uiToData(data) {
         this.fields.forEach(v => {
-            console.dir(v)
+            //console.dir(v)
             if (v instanceof HTMLInputElement) {
                 //Reflect.set(data, v.dataset.bind, this.readInputValue(v));
                 this.setVal(data, this.readInputValue(v), v.dataset.bind)
