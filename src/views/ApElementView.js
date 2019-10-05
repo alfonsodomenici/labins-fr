@@ -97,9 +97,10 @@ export default class ApElementView extends ApElement {
             return input.value ? input.value : null;
         } else if (input.type === 'checkbox') {
             return input.checked;
-        }
-        else if (input.type === 'date') {
+        }else if (input.type === 'date') {
             return input.value ? input.value : null;
+        }else if (input.type === 'file') {
+            return input.files[0]
         }
     }
 

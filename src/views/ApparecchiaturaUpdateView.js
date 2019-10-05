@@ -30,7 +30,8 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.azService.all(),
             this.grandezzaService.all(),
             this.umService.all(),
-            this.service.find(this.params.id)
+            this.service.find(this.params.id),
+            this.service.findDocumenti(this.params.id)
         ]).then(values => {
             this.laboratori = values[0].laboratori;
             this.domini = values[1];
@@ -39,6 +40,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.grandezze = values[4];
             this.um = values[5];
             this.data = values[6];
+            this.documenti = values[7].documenti;
             this.taratura = this.data.taratura;
             this.manutenzione = this.data.manutenzione;
             this.changeView();
@@ -222,6 +224,8 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                 
                 ${this.manutenzione ? this.createManutenzioneView() : html``}
                 
+                ${this.createDocumentiView()}
+
             </div>
             <input type="submit"  class="pure-button pure-button-primary" value="Salva" />
         </form>
@@ -314,6 +318,28 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                 </fieldset>
             </div>
         `;
+    }
+
+    createDocumentiView(){
+        if(this.documenti){
+            return html`
+                <section class="pure-u-1 pure-u-md-1-2">
+                    <div class="pure-g">
+                        <header class="pure-u-1">
+                            <h3>Documentazione associata</h3>
+                        </header>
+
+                        <div class="pure-u-1 group-view">
+                            <ul>
+                                ${this.documenti.map(d => html`<li><a @click=${e => this.onDocumentoView(e,d)} href="#">${d.denominazione}</a></li>`)}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            `;
+        }else{
+            return html``;
+        }
     }
 }
 customElements.define('apparecchiatura-update', ApparecchiaturaUpdateView);
