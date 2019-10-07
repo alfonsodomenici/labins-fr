@@ -39,7 +39,6 @@ export default class ApparecchiaturaCreateView extends ApElementView {
             this.um = values[4];
             this.laboratori = values[5].laboratori;
             this.changeView();
-            this.dataToUi();
         }
         );
     }

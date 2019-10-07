@@ -3,8 +3,8 @@ import { html } from "./../../node_modules/lit-html/lit-html.js"
 
 export default class UtenteListView extends ApElementView {
 
-    constructor() {
-        super();
+    constructor(params) {
+        super(params);
     }
 
     connectedCallback() {

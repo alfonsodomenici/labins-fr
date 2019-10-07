@@ -14,6 +14,72 @@ export default class AziendaListView extends ApElementView {
         this.loadData();
     }
 
+    loadData() {
+        this.service.all()
+            .then(json => {
+                this.count = json.size;
+                this.data = json.aziende;
+                this.changeView();
+            });
+    }
+
+    onRowClick(e, id) {
+        this.selected = this.data.find(v => v.id === id);
+        const old = this.root.querySelector("tr.selected");
+        const selRow = this.root.querySelector(`[row-key="${id}"]`);
+        if (old) {
+            old.classList.toggle('selected');
+        }
+        selRow.classList.toggle('selected');
+    }
+
+    onPageChange(e) {
+        let currentPage = e.detail.cur;
+        this.criteria.start = this.criteria.pageSize * currentPage;
+        this.loadData();
+    }
+
+    onCreate(e) {
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'AziendaCreate'
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
+    onUpdate(e) {
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'AziendaUpdate',
+                params: {
+                    id: this.selected.id
+                }
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
+    onDelete(e) {
+        e.preventDefault();
+        console.log('ondelete...');
+        this.service.delete(this.selected.id).then(_ => {
+            this.selected = null;
+            this.loadData();
+        });
+
+    }
+    
     createStyle() {
         return html`
             tbody > tr:hover{
@@ -64,15 +130,6 @@ export default class AziendaListView extends ApElementView {
         `;
     }
 
-    loadData() {
-        this.service.all()
-            .then(json => {
-                this.count = json.size;
-                this.data = json.aziende;
-                this.changeView();
-            });
-    }
-
     createRow({ id, denominazione, contatto, telefono, email, note, costruttore, taratore, manutentore, distributore }) {
         return html`
             <tr row-key=${id} @click=${e => this.onRowClick(e, id)}>
@@ -88,64 +145,6 @@ export default class AziendaListView extends ApElementView {
                 <td>${distributore}</td>
             </tr>
        `;
-    }
-
-    onRowClick(e, id) {
-        this.selected = this.data.find(v => v.id === id);
-        const old = this.root.querySelector("tr.selected");
-        const selRow = this.root.querySelector(`[row-key="${id}"]`);
-        if (old) {
-            old.classList.toggle('selected');
-        }
-        selRow.classList.toggle('selected');
-    }
-
-    onPageChange(e) {
-        let currentPage = e.detail.cur;
-        this.criteria.start = this.criteria.pageSize * currentPage;
-        this.loadData();
-    }
-
-    onCreate(e) {
-        e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'AziendaCreate',
-                params: {}
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
-    }
-
-    onUpdate(e) {
-        e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'AziendaUpdate',
-                params: {
-                    id: this.selected.id
-                }
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
-    }
-
-    onDelete(e) {
-        e.preventDefault();
-        console.log('ondelete...');
-        this.service.delete(this.selected.id).then(_ => {
-            this.selected = null;
-            this.loadData();
-        });
-
     }
 }
 customElements.define('azienda-list', AziendaListView);

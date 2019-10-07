@@ -15,6 +15,82 @@ export default class ApparecchiaturaListView extends ApElementView {
         this.changeView();
     }
 
+    onRowClick(e, id) {
+        this.selected = this.data.find(v => v.id === id);
+        this.params.id = id;
+        this.params.suburi = this.selected.link.uri;
+        const old = this.root.querySelector("tr.selected");
+        const selRow = this.root.querySelector(`[row-key="${id}"]`);
+        if (old) {
+            old.classList.toggle('selected');
+        }
+        selRow.classList.toggle('selected');
+    }
+
+    onSearch(e) {
+        this.detail = e.detail
+        this.criteria = e.detail;
+        this.criteria.start = 0;
+        this.criteria.pageSize = this.pageSize;
+        this.loadData();
+    }
+
+    onPageChange(e) {
+        let currentPage = e.detail.cur;
+        this.criteria.start = this.criteria.pageSize * currentPage;
+        this.loadData();
+    }
+
+    loadData() {
+        this.service.search(this.criteria)
+            .then(json => {
+                this.count = json.size;
+                this.data = json.apparecchiature;
+                render(this.createDataView(), this.root.getElementById('container'));
+            })
+    }
+
+    onCreate(e) {
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'ApparecchiaturaCreate',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
+    onViewDetail(e) {
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'Apparecchiatura',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
+    onDelete(e) {
+        e.preventDefault();
+        console.log('ondelete...');
+        this.service.delete(this.params.id).then(_ => {
+            this.selected = null;
+            this.params.id = null;
+            this.loadData();
+        });
+
+    }
+
     createStyle() {
         return html`
             tbody > tr:hover{
@@ -87,81 +163,6 @@ export default class ApparecchiaturaListView extends ApElementView {
                 <td>${dominio ? dominio.denominazione : ''}</td>
             </tr>
        `;
-    }
-
-    onRowClick(e, id) {
-        this.selected = this.data.find(v => v.id === id);
-        this.params.id = id;
-        const old = this.root.querySelector("tr.selected");
-        const selRow = this.root.querySelector(`[row-key="${id}"]`);
-        if (old) {
-            old.classList.toggle('selected');
-        }
-        selRow.classList.toggle('selected');
-    }
-
-    onSearch(e) {
-        this.detail = e.detail
-        this.criteria = e.detail;
-        this.criteria.start = 0;
-        this.criteria.pageSize = this.pageSize;
-        this.loadData();
-    }
-
-    onPageChange(e) {
-        let currentPage = e.detail.cur;
-        this.criteria.start = this.criteria.pageSize * currentPage;
-        this.loadData();
-    }
-
-    loadData() {
-        this.service.search(this.criteria)
-            .then(json => {
-                this.count = json.size;
-                this.data = json.apparecchiature;
-                render(this.createDataView(), this.root.getElementById('container'));
-            })
-    }
-
-    onCreate(e) {
-        e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'ApparecchiaturaCreate',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
-    }
-
-    onViewDetail(e) {
-        e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'Apparecchiatura',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
-    }
-
-    onDelete(e) {
-        e.preventDefault();
-        console.log('ondelete...');
-        this.service.delete(this.params.id).then(_ => {
-            this.selected = null;
-            this.params.id = null;
-            this.loadData();
-        });
-
     }
 }
 customElements.define('apparecchiatura-list', ApparecchiaturaListView);

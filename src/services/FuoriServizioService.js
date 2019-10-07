@@ -1,22 +1,14 @@
 import AbstractService from './AbstractService.js';
 
-export default class ApparecchiaturaService extends AbstractService {
+export default class FuoriServizioService extends AbstractService {
 
     constructor({ uri }) {
         super();
-        this.url += `${uri}/apparecchiature`;
+        this.url += `${uri}/fuori-servizi`;
     }
 
-    async search({ idDom, idTipo, idAz, idDistr, idMan, idTar, start, pageSize }) {
-        const resp = await fetch(`${this.url}?idDom=${idDom}&idTipo=${idTipo}&idAz=${idAz}&idDistr=${idDistr}&idMan=${idMan}&idTar=${idTar}&start=${start}&page=${pageSize}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
-    }
-
-    async findDiRiferimento() {
-        const resp = await fetch(`${this.url}/riferimento`, {
+    async search({ start, pageSize }) {
+        const resp = await fetch(`${this.url}?start=${start}&page=${pageSize}`, {
             method: 'GET',
             headers: this.headers
         });
@@ -31,13 +23,13 @@ export default class ApparecchiaturaService extends AbstractService {
         return await resp.json();
     }
 
-    async create(apparecchiatura) {
+    async create(fuoriServizio) {
         try {
             this.headers.set('Content-Type', 'application/json');
             const resp = await fetch(`${this.url}`, {
                 method: 'POST',
                 headers: this.headers,
-                body: JSON.stringify(apparecchiatura)
+                body: JSON.stringify(fuoriServizio)
             });
             if (!resp.ok) {
                 throw new Error('Network response was not ok.');
@@ -48,13 +40,13 @@ export default class ApparecchiaturaService extends AbstractService {
         }
     }
 
-    async update(apparecchiatura) {
+    async update(fuoriServizio) {
         try {
             this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}/${apparecchiatura.id}`, {
+            const resp = await fetch(`${this.url}/${fuoriServizio.id}`, {
                 method: 'PUT',
                 headers: this.headers,
-                body: JSON.stringify(apparecchiatura)
+                body: JSON.stringify(fuoriServizio)
             });
             if (!resp.ok) {
                 throw new Error('Network response was not ok.');
@@ -157,45 +149,4 @@ export default class ApparecchiaturaService extends AbstractService {
             })
         );
     }
-
-    async createFuoriServizio(id,fuoriServizio) {
-        try {
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}/${id}/fuori-servizi/`, {
-                method: 'POST',
-                headers: this.headers,
-                body: JSON.stringify(fuoriServizio)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
-    }
-
-    /*
-    async updloadDocumenti1(id, docs) {
-        return docs.reduce(async (promise, doc) => {
-            // This line will wait for the last async function to finish.
-            // The first iteration uses an already resolved Promise
-            // so, it will immediately continue.
-            await promise;
-            const msg = await this.uploadDocumento(id, doc);
-            console.log(msg);
-        }, Promise.resolve());
-    }
-
-    async deleteDocumenti1(id, docs) {
-        docs.reduce(async (promise, doc) => {
-            // This line will wait for the last async function to finish.
-            // The first iteration uses an already resolved Promise
-            // so, it will immediately continue.
-            await promise;
-            const msg = await this.deleteDocumento(id, doc.id);
-            console.log(msg);
-        }, Promise.resolve());
-    }
-    */
 }

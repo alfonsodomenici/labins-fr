@@ -27,18 +27,19 @@ export default class ApNav extends HTMLElement {
 
     onNavigation(e) {
         const {hash} = window.location;
+        const linkEl = this.querySelector(`a[href="${hash}"]`);
+        this.onLinkClicked({target: linkEl});
         const event = new CustomEvent(
             'ap-navigation', {
                 detail: {
                     link: hash.substring(1),
-                    src: 'mainnav'
+                    src: 'mainnav',
+                    params: {}
                 },
                 bubbles: true
             }
         );
         this.dispatchEvent(event);
-        const linkEl = this.querySelector(`a[href="${hash}"]`);
-        this.onLinkClicked({target: linkEl});
     }
 }
 customElements.define('ap-nav', ApNav);

@@ -58,7 +58,18 @@ export default class ApparecchiaturaView extends ApElementView {
 
     }
     onFuoriServizio(e) {
-
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'FuoriServizioCreate',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
     }
 
     onDeroga(e) {
