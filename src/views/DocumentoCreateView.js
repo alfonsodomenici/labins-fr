@@ -15,9 +15,9 @@ export default class DocumentoCreateView extends ApElementView {
         e.preventDefault();
         let doc = {};
         this.uiToData(doc);
+        doc.id = new Date().getTime();
         doc.mediaType = doc.fileData.type;
         doc.file = doc.fileData.name;
-        doc.toupload = true;
 
         this.dispatchEvent(new CustomEvent('add', {
             bubbles: true,

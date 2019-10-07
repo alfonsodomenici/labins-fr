@@ -7,6 +7,7 @@ import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService
 import LaboratorioService from "./../services/LaboratorioService.js";
 import GrandezzaService from "../services/GrandezzaService.js";
 import UnitaMisuraService from "../services/UnitaMisuraService.js";
+import DocumentoCreateView from "./DocumentoCreateView.js";
 
 export default class ApparecchiaturaUpdateView extends ApElementView {
 
@@ -19,6 +20,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
         this.tappService = new TipoApperecchiaturaService(params);
         this.grandezzaService = new GrandezzaService();
         this.umService = new UnitaMisuraService();
+        this.uploads = [];
     }
 
 
@@ -52,12 +54,18 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
     onsave(e) {
         e.preventDefault();
         this.uiToData(this.data);
-        this.service.update(this.data)
-            .then(json => {
-                this.data = json;
+        this.service.updateDocumenti(this.params.id, this.uploads, this.documenti.filter(v => v.todelete))
+            .then(() => Promise.all([
+                this.service.update(this.data),
+                this.service.findDocumenti(this.params.id)
+            ]))
+            .then(values => {
+                this.data = values[0];
+                this.documenti = values[1].documenti;
+                this.uploads = [];
                 this.changeView();
                 this.dataToUi(this.data);
-            });
+            })
     }
 
     onSoggettoTaratura(e) {
@@ -67,6 +75,22 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
 
     onSoggettoManutenzione(e) {
         this.manutenzione = e.path[0].checked;
+        this.changeView();
+    }
+
+    onAddDocumento(e) {
+        this.uploads.push(e.detail);
+        this.changeView();
+    }
+
+    onDeleteDocumento(e, id) {
+        e.preventDefault();
+        const finded = this.documenti.find(v => v.id === id);
+        if (finded) {
+            finded.todelete = true;
+        } else {
+            this.uploads = this.uploads.filter(v => v.id !== id);
+        }
         this.changeView();
     }
 
@@ -320,26 +344,43 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
         `;
     }
 
-    createDocumentiView(){
-        if(this.documenti){
-            return html`
-                <section class="pure-u-1 pure-u-md-1-2">
+    createDocumentiView() {
+        return html`
+            <div class="pure-u-1">
                     <div class="pure-g">
-                        <header class="pure-u-1">
-                            <h3>Documentazione associata</h3>
-                        </header>
-
-                        <div class="pure-u-1 group-view">
-                            <ul>
-                                ${this.documenti.map(d => html`<li><a @click=${e => this.onDocumentoView(e,d)} href="#">${d.denominazione}</a></li>`)}
-                            </ul>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <fieldset>
+                            <legend>Documentazione associata</legend>
+                                <table  class="pure-table pure-table-horizontal">
+                                    <thead>
+                                        <th>nome</th>
+                                        <th>file</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                        ${this.documenti.filter(v => !v.todelete).map(row => this.createDocumentoRow(row))}
+                                        ${this.uploads.map(row => this.createDocumentoRow(row))}
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <documento-create @add=${e => this.onAddDocumento(e)}></documento-create> 
                         </div>
                     </div>
-                </section>
-            `;
-        }else{
-            return html``;
-        }
+                </fieldset>
+            </div>
+        `;
+    }
+
+    createDocumentoRow({ id, denominazione, file }) {
+        return html`
+            <tr row-key=${id}>
+                <td>${denominazione}</td>
+                <td>${file}</td>
+                <td><button @click=${e => this.onDeleteDocumento(e, id)} class="pure-button">elimina</button></td>
+            </tr>
+       `;
     }
 }
 customElements.define('apparecchiatura-update', ApparecchiaturaUpdateView);

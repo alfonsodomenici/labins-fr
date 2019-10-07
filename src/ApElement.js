@@ -14,9 +14,9 @@ export default class ApElement extends HTMLElement {
     loadView() {
         return html`
             <style>
-                @import url(./../pure.css);
-                @import url(./../grids-responsive.css);
-                @import url(./../style.css);
+                @import url(./pure.css);
+                @import url(./grids-responsive.css);
+                @import url(./style.css);
                 :host{
                     /*all: initial;*/
                     display:block;

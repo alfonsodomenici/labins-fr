@@ -54,9 +54,6 @@ export default class ApparecchiaturaView extends ApElementView {
     onDelete(e) {
 
     }
-    onDocumenti(e) {
-
-    }
     onStorico(e) {
 
     }
@@ -247,7 +244,6 @@ export default class ApparecchiaturaView extends ApElementView {
 
             <footer class="pure-u-1">
                 <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modica</button>
-                <button  @click=${e => this.onDocumenti(e)} class='pure-button pure-button-primary'>Documenti</button>
                 <button  @click=${e => this.onStorico(e)} class='pure-button pure-button-primary'>Storico</button>
                 <button  @click=${e => this.onFuoriServizio(e)} class='pure-button pure-button-primary'>Fuori Servizio</button>
                 <button  @click=${e => this.onDeroga(e)} class='pure-button pure-button-primary'>Deroga</button>

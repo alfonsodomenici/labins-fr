@@ -20,7 +20,6 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         this.grandezzaService = new GrandezzaService();
         this.umService = new UnitaMisuraService();
         this.labService = new LaboratorioService();
-        this.documenti = [];
         this.uploads = [];
     }
 
@@ -49,9 +48,9 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         e.preventDefault();
         const entity = {};
         this.uiToData(entity);
-        console.log(entity);
         this.service.create(entity)
-            .then(msg => console.log(msg));
+            .then(json => this.service.updloadDocumenti(json.id, this.uploads))
+            .then(values => console.log(values));
     }
 
     onSoggettoTaratura(e) {
@@ -64,9 +63,15 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         this.changeView();
     }
 
-    onAddDocumento(e){
+    onAddDocumento(e) {
         console.log(e.detail);
         this.uploads.push(e.detail);
+        this.changeView();
+    }
+
+    onDeleteDocumento(e, id) {
+        e.preventDefault();
+        this.uploads = this.uploads.filter(v => v.id !== id);
         this.changeView();
     }
 
@@ -230,7 +235,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         return html``;
     }
 
-    createTaraturaView(){
+    createTaraturaView() {
         return html`
             <div class="pure-u-1 pure-u-md-1-2">
                 <fieldset>
@@ -272,7 +277,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         `;
     }
 
-    createManutenzioneView(){
+    createManutenzioneView() {
         return html`
             <div class="pure-u-1 pure-u-md-1-2">
                 <fieldset>
@@ -314,44 +319,40 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         `;
     }
 
-    createDocumentiView(){
-        if(this.documenti){
-            return html`
-                <div class="pure-u-1">
-                        <div class="pure-g">
-                            <div class="pure-u-1 pure-u-md-1-2">
-                                <fieldset>
-                                <legend>Documentazione associata</legend>
-                                    <table  class="pure-table pure-table-horizontal">
-                                        <thead>
-                                            <th>nome</th>
-                                            <th>file</th>
-                                            <th></th>
-                                        </thead>
-                                        <tbody>
-                                            ${this.documenti.map(row => this.createDocumentoRow(row))}
-                                            ${this.uploads.map(row => this.createDocumentoRow(row))}
-                                        </tbody>
-                                    </table>
-                                </fieldset>
-                            </div>
-                            <div class="pure-u-1 pure-u-md-1-2">
-                                <documento-create @add=${e => this.onAddDocumento(e)}></documento-create> 
-                            </div>
+    createDocumentiView() {
+        return html`
+            <div class="pure-u-1">
+                    <div class="pure-g">
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <fieldset>
+                            <legend>Documentazione associata</legend>
+                                <table  class="pure-table pure-table-horizontal">
+                                    <thead>
+                                        <th>nome</th>
+                                        <th>file</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                        ${this.uploads.map(row => this.createDocumentoRow(row))}
+                                    </tbody>
+                                </table>
+                            </fieldset>
                         </div>
-                    </fieldset>
-                </div>
-            `;
-        }else{
-            return html``;
-        }
+                        <div class="pure-u-1 pure-u-md-1-2">
+                            <documento-create @add=${e => this.onAddDocumento(e)}></documento-create> 
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        `;
     }
 
-    createDocumentoRow({id,denominazione,file}){
+    createDocumentoRow({ id, denominazione, file }) {
         return html`
             <tr row-key=${id}>
                 <td>${denominazione}</td>
                 <td>${file}</td>
+                <td><button @click=${e => this.onDeleteDocumento(e, id)} class="pure-button">elimina</button></td>
             </tr>
        `;
     }
