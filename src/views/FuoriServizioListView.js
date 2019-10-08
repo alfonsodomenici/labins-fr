@@ -7,7 +7,7 @@ import Paginator from "./Paginator.js";
 export default class FuoriServizioListView extends ApElementView {
 
     constructor(params) {
-        super(params);
+        super(JSON.parse(JSON.stringify(params)));
         this.service = new FuoriServizioService({uri: this.params.suburi});
         this.appService = new ApparecchiaturaService(params);
     }
@@ -35,6 +35,9 @@ export default class FuoriServizioListView extends ApElementView {
 
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
+        this.params.idApparecchiatura = this.params.id;
+        this.params.id = this.selected.id;
+        console.log(this.params);
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         if (old) {
@@ -49,6 +52,21 @@ export default class FuoriServizioListView extends ApElementView {
         this.loadData();
     }
     
+    onViewDetail(e) {
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'FuoriServizio',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
+
     createStyle() {
         return html`
             tbody > tr:hover{
@@ -104,6 +122,7 @@ export default class FuoriServizioListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td colspan="2">
+                    <button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary'>Dettagli</button>
                     </td>
                 </tr>
             </tfoot>
