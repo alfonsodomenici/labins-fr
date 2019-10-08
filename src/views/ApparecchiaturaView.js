@@ -1,21 +1,26 @@
 import ApElementView from "./ApElementView.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
 import ApparecchiaturaService from "../services/ApparecchiaturaService.js";
+import FuoriServizioService from "./../services/FuoriServizioService.js";
 
 export default class ApparecchiaturaView extends ApElementView {
 
     constructor(params) {
         super(params);
         this.service = new ApparecchiaturaService(params);
+        this.fsService = new FuoriServizioService({ uri: this.params.suburi });
     }
 
     connectedCallback() {
         Promise.all([
             this.service.find(this.params.id),
-            this.service.findDocumenti(this.params.id)
+            this.service.findDocumenti(this.params.id),
+            this.fsService.status()
         ]).then(values => {
             this.data = values[0];
             this.documenti = values[1].documenti;
+            this.fsStatus = values[2];
+            console.log(this.fsStatus);
             this.changeView();
         }
         );
@@ -36,27 +41,39 @@ export default class ApparecchiaturaView extends ApElementView {
         this.dispatchEvent(event);
     }
 
-    onDocumentoView(e,doc){
+    onDocumentoView(e, doc) {
         e.preventDefault();
-        this.service.downloadDocumento(this.params.id,doc.id)
-        .then(blob => {
-            console.dir(blob)
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.href = url;
-            a.download = doc.denominazione;
-            this.root.appendChild(a); 
-            a.click();
-            a.remove();
-        });
+        this.service.downloadDocumento(this.params.id, doc.id)
+            .then(blob => {
+                console.dir(blob)
+                var url = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = doc.denominazione;
+                this.root.appendChild(a);
+                a.click();
+                a.remove();
+            });
     }
 
     onDelete(e) {
 
     }
     onStorico(e) {
-
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'FuoriServizioList',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
     }
+
     onFuoriServizio(e) {
         e.preventDefault();
         const event = new CustomEvent(
@@ -81,6 +98,26 @@ export default class ApparecchiaturaView extends ApElementView {
     onInServizio(e) {
 
     }
+
+    checkUpdateDisabled() {
+        return ``;
+    }
+    checkStoricoDisabled() {
+        return this.fsStatus.isStoricoEmpty ? ` pure-button-disabled` : ``;
+    }
+    checkFuoriServizioDisabled() {
+        return (this.fsStatus.isFuoriServizio || (this.fsStatus.isViRequired && this.fsStatus.isViMissing)) ? ` pure-button-disabled` : ``;
+    }
+    checkDerogaDisabled() {
+        return (this.fsStatus.isFuoriServizio || this.fsStatus.isFuoriServizio) ? ` pure-button-disabled` : ``;
+    }
+    checkVerificaIntermediaDisabled() {
+        return (this.fsStatus.isFuoriServizio || (this.fsStatus.isViRequired && this.fsStatus.isViMissing === false)) ? ` pure-button-disabled` : ``;
+    }
+    checkRimettiInServizioDisabled() {
+        return this.fsStatus.isFuoriServizio === false ? ` pure-button-disabled` : ``;
+    }
+
 
     createView() {
         return html`
@@ -254,19 +291,19 @@ export default class ApparecchiaturaView extends ApElementView {
             ${this.createDocumentiView()}
 
             <footer class="pure-u-1">
-                <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modica</button>
-                <button  @click=${e => this.onStorico(e)} class='pure-button pure-button-primary'>Storico</button>
-                <button  @click=${e => this.onFuoriServizio(e)} class='pure-button pure-button-primary'>Fuori Servizio</button>
-                <button  @click=${e => this.onDeroga(e)} class='pure-button pure-button-primary'>Deroga</button>
-                <button  @click=${e => this.onVerificaIntermedia(e)} class='pure-button pure-button-primary'>Verifica Intermedia</button>
-                <button  @click=${e => this.onInServizio(e)} class='pure-button pure-button-primary'>In Servizio</button>
+                <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary ${this.checkUpdateDisabled()}'>Modica</button>
+                <button  @click=${e => this.onStorico(e)} class='pure-button pure-button-primary ${this.checkStoricoDisabled()}'>Storico</button>
+                <button  @click=${e => this.onFuoriServizio(e)} class='pure-button pure-button-primary ${this.checkFuoriServizioDisabled()}'>Fuori Servizio</button>
+                <button  @click=${e => this.onDeroga(e)} class='pure-button pure-button-primary ${this.checkDerogaDisabled()}'>Deroga</button>
+                <button  @click=${e => this.onVerificaIntermedia(e)} class='pure-button pure-button-primary ${this.checkVerificaIntermediaDisabled()}'>Verifica Intermedia</button>
+                <button  @click=${e => this.onInServizio(e)} class='pure-button pure-button-primary ${this.checkRimettiInServizioDisabled()}'>Rimessa In Servizio</button>
                 </footer>
             </article>
         `;
     }
 
-    createTaraturaView(){
-        if(this.data.taratura){
+    createTaraturaView() {
+        if (this.data.taratura) {
             return html`
                 <section class="pure-u-1 pure-u-md-1-2">
                     <div class="pure-g">
@@ -291,13 +328,13 @@ export default class ApparecchiaturaView extends ApElementView {
                     </div>
                 </section>
             `;
-        }else{
+        } else {
             return html``;
         }
     }
 
-    createManutenzioneView(){
-        if(this.data.manutenzione){
+    createManutenzioneView() {
+        if (this.data.manutenzione) {
             return html`
                 <section class="pure-u-1 pure-u-md-1-2">
                     <div class="pure-g">
@@ -311,7 +348,7 @@ export default class ApparecchiaturaView extends ApElementView {
                             </label>
                         </div>
                         
-                        ${this.createTipoGestioneView(this.data.gestioneManutenzione,true)}
+                        ${this.createTipoGestioneView(this.data.gestioneManutenzione, true)}
 
                         <div class="pure-u-1 group-view">
                             <label>
@@ -322,13 +359,13 @@ export default class ApparecchiaturaView extends ApElementView {
                     </div>
                 </section>
             `;
-        }else{
+        } else {
             return html``;
         }
     }
 
-    createTipoGestioneView(gest,flagManutenzione){
-        if(gest.tipo.denominazione === 'TEMPORALE'){
+    createTipoGestioneView(gest, flagManutenzione) {
+        if (gest.tipo.denominazione === 'TEMPORALE') {
             return html`
                 <div class="pure-u-1 group-view">
                     <label>
@@ -343,7 +380,7 @@ export default class ApparecchiaturaView extends ApElementView {
                     </label>
                 </div>
             `;
-        }else if(gest.tipo.denominazione === 'DESCRITTIVA'){
+        } else if (gest.tipo.denominazione === 'DESCRITTIVA') {
             return html`
                 <div class="pure-u-1 group-view">
                     <label>
@@ -353,7 +390,7 @@ export default class ApparecchiaturaView extends ApElementView {
                 </div>
             `;
         }
-        if(flagManutenzione){
+        if (flagManutenzione) {
             return html`
                 <div class="pure-u-1 group-view">
                     <label>
@@ -361,12 +398,12 @@ export default class ApparecchiaturaView extends ApElementView {
                         <span class="content">${gest.attivita}</span>
                     </label>
                 </div>
-            `; 
+            `;
         }
     }
 
-    createDocumentiView(){
-        if(this.documenti){
+    createDocumentiView() {
+        if (this.documenti) {
             return html`
                 <section class="pure-u-1 pure-u-md-1-2">
                     <div class="pure-g">
@@ -376,13 +413,13 @@ export default class ApparecchiaturaView extends ApElementView {
 
                         <div class="pure-u-1 group-view">
                             <ul>
-                                ${this.documenti.map(d => html`<li><a @click=${e => this.onDocumentoView(e,d)} href="#">${d.denominazione}</a></li>`)}
+                                ${this.documenti.map(d => html`<li><a @click=${e => this.onDocumentoView(e, d)} href="#">${d.denominazione}</a></li>`)}
                             </ul>
                         </div>
                     </div>
                 </section>
             `;
-        }else{
+        } else {
             return html``;
         }
     }
@@ -390,6 +427,6 @@ export default class ApparecchiaturaView extends ApElementView {
         return html``;
     }
 
-    
+
 }
 customElements.define('apparecchiatura-view', ApparecchiaturaView);

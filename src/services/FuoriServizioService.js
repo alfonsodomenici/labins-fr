@@ -7,8 +7,8 @@ export default class FuoriServizioService extends AbstractService {
         this.url += `${uri}/fuori-servizi`;
     }
 
-    async search({ start, pageSize }) {
-        const resp = await fetch(`${this.url}?start=${start}&page=${pageSize}`, {
+    async search({ storico, fs, vi, last, start, pageSize }) {
+        const resp = await fetch(`${this.url}?storico=${storico}&fs=${fs}&vi=${vi}&last=${last}&start=${start}&page=${pageSize}`, {
             method: 'GET',
             headers: this.headers
         });
@@ -17,6 +17,14 @@ export default class FuoriServizioService extends AbstractService {
 
     async find(id) {
         const resp = await fetch(`${this.url}/${id}`, {
+            method: 'GET',
+            headers: this.headers
+        });
+        return await resp.json();
+    }
+
+    async status() {
+        const resp = await fetch(`${this.url}/status`, {
             method: 'GET',
             headers: this.headers
         });
