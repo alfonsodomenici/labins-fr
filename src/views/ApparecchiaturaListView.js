@@ -17,8 +17,7 @@ export default class ApparecchiaturaListView extends ApElementView {
 
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
-        this.params.id = id;
-        this.params.suburi = this.selected.link.uri;
+        this.params = {...this.params, id: id, suburi: this.selected.link.uri};
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         if (old) {

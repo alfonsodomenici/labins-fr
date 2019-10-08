@@ -80,7 +80,7 @@ export default class ApparecchiaturaView extends ApElementView {
             'ap-navigation', {
             detail: {
                 link: 'FuoriServizioCreate',
-                params: this.params
+                params: {...this.params, view: 'fs'}
             },
             bubbles: true,
             composed: true
@@ -93,10 +93,32 @@ export default class ApparecchiaturaView extends ApElementView {
 
     }
     onVerificaIntermedia(e) {
-
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'FuoriServizioCreate',
+                params: {...this.params, view: 'vi'}
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
     }
     onInServizio(e) {
-
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'FuoriServizioCreate',
+                params: {...this.params, view: 'ris'}
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
     }
 
     checkUpdateDisabled() {

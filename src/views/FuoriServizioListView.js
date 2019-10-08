@@ -35,8 +35,7 @@ export default class FuoriServizioListView extends ApElementView {
 
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
-        this.params.idApparecchiatura = this.params.id;
-        this.params.id = this.selected.id;
+        this.params = {...this.params, idApparecchiatura: this.params.id, id: this.selected.id};
         console.log(this.params);
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);

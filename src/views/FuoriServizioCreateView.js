@@ -9,7 +9,7 @@ export default class FuoriServizioCreateView extends ApElementView {
 
     constructor(params) {
         super(params);
-        this.service = new FuoriServizioService({uri: this.params.suburi});
+        this.service = new FuoriServizioService({ uri: this.params.suburi });
         this.appService = new ApparecchiaturaService(params);
         this.azService = new AziendaService();
         this.uploads = [];
@@ -54,45 +54,34 @@ export default class FuoriServizioCreateView extends ApElementView {
     }
 
     createView() {
+        if (this.params.view === 'fs') {
+            return this.createFsView();
+        } else if (this.params.view === 'vi') {
+            return this.createViView();
+        } else {
+            return this.createRisView();
+        }
+    }
+
+    createFsView() {
         return html`
             <form class="pure-form pure-form-stacked" @submit=${e => this.onsave(e)}>
                 <fieldset>
-                    <legend>Crea Fuori Servizio</legend>
+                    <legend>Messa Fuori Servizio</legend>
                     <div class="pure-g">
-                        <div class="pure-u-1">
-                            <div class="pure-g">
-                                <div class="pure-u-1 pure-u-md-1-3 group-view">
-                                    <label>
-                                        <span class="label">Codice</span>
-                                        <span class="content">${this.apparecchiatura.codice}</span>
-                                    </label>
-                                </div>
-                                <div class="pure-u-1 pure-u-md-1-3 group-view">
-                                    <label>
-                                        <span class="label">Descrizione</span>
-                                        <span class="content">${this.apparecchiatura.descrizione}</span>
-                                    </label>
-                                </div>
-                                <div class="pure-u-1 pure-u-md-1-3 group-view">
-                                    <label>
-                                        <span class="label">Matricola</span>
-                                        <span class="content">${this.apparecchiatura.matricola}</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        ${this.createApparecchiaturaView()}
                         <div class="pure-u-1">
                             <label for="motivo">Motivo Fuori Servizio</label>
-                            <select id="motivo" data-bind="motivo" class="pure-input-1-2">
+                            <select id="motivo" data-bind="motivo" class="pure-input-1-2" required>
                                 <option value="0">Manutenzione</option>
                                 <option value="1">Taratura</option>
-                                <option value="2">Verifica intermedia</option>
                                 <option value="3">Fori ServizioStraordinario</option>
                             </select>
                         </div>
+
                         <div class="pure-u-1 pure-u-md-1-4">
                             <label for="inizio">Dal</label>
-                            <input id="inizio" data-bind="inizio" class="pure-u-23-24" type="date">
+                            <input id="inizio" data-bind="inizio" class="pure-u-23-24" type="date" required>
                         </div>
                         <div class="pure-u-1 pure-u-md-1-4">
                             <label for="utenteInizio">Inviato da</label>
@@ -108,7 +97,7 @@ export default class FuoriServizioCreateView extends ApElementView {
                         </div>
                         <div class="pure-u-1 pure-u-md-1-4">
                             <label for="azienda">Taratore/Distributore</label>
-                            <select id="azienda" data-bind="azienda" class="pure-input-1-2">
+                            <select id="azienda" data-bind="azienda" class="pure-input-1-2" required>
                                 <option value="-1"></option>
                                 ${this.aziende.map(v => this.renderOptions(v))}
                             </select>
@@ -141,6 +130,120 @@ export default class FuoriServizioCreateView extends ApElementView {
         `;
     }
 
+    createRisView() {
+        return html`
+            <form class="pure-form pure-form-stacked" @submit=${e => this.onsave(e)}>
+                <fieldset>
+                    <legend>Rimessa in Servizio</legend>
+                    <div class="pure-g">
+                        ${this.createApparecchiaturaView()}
+                        <div class="pure-u-1">
+                            <label for="motivo">Motivo Fuori Servizio</label>
+                            <select id="motivo" data-bind="motivo" class="pure-input-1-2" required>
+                                <option value="0">Manutenzione</option>
+                                <option value="1">Taratura</option>
+                                <option value="3">Fori ServizioStraordinario</option>
+                            </select>
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="inizio">Dal</label>
+                            <input id="inizio" data-bind="inizio" class="pure-u-23-24" type="date" required disabled>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="utenteInizio">Inviato da</label>
+                            <input id="utenteInizio" data-bind="utenteInizio" class="pure-u-23-24" type="text" disabled>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="fine">Al</label>
+                            <input id="fine" data-bind="fine" class="pure-u-23-24" type="date" required>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="utenteFine">Inviato da</label>
+                            <input id="utenteFine" data-bind="utenteFine" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="azienda">Taratore/Distributore</label>
+                            <select id="azienda" data-bind="azienda" class="pure-input-1-2" required>
+                                <option value="-1"></option>
+                                ${this.aziende.map(v => this.renderOptions(v))}
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="riferimento">Apparecchio di riferimento</label>
+                            <select id="riferimento" data-bind="riferimento" class="pure-input-1-2">
+                                <option value="-1"></option>
+                                ${this.apparecchiatureRif.map(v => this.renderOptions(v))}
+                            </select>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="necessariaVerifica" class="pure-checkbox">
+                                <input id="necessariaVerifica" data-bind="necessariaVerifica" type="checkbox"> Necessaria
+                                verifica intermedia dopo giorni
+                                taratura
+                            </label>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-4">
+                            <label for="giorniVerifica"></label>
+                            <input id="giorniVerifica" data-bind="giorniVerifica" class="pure-u-23-24" min="0" type="number">
+                        </div>
+
+                        ${this.createDocumentiView()}
+
+                    </div>
+                    <input type="submit" class="pure-button pure-button-primary" value="Salva" />
+                </fieldset>
+            </form>
+        `;
+    }
+
+    createViView() {
+        return html`
+        <form class="pure-form pure-form-stacked" @submit=${e => this.onsave(e)}>
+            <fieldset>
+                <legend>Verifica Intermedia</legend>
+                <div class="pure-g">
+                    ${this.createApparecchiaturaView()}
+                    <div class="pure-u-1">
+                        <label for="motivo">Motivo Fuori Servizio</label>
+                        <select id="motivo" data-bind="motivo" class="pure-input-1-2" required>
+                            <option value="2">Verifica Intermedia</option>
+                        </select>
+                    </div>
+
+                    <div class="pure-u-1 pure-u-md-1-2">
+                        <label for="inizio">Data verifica</label>
+                        <input id="inizio" data-bind="inizio" class="pure-u-23-24" type="date" required>
+                    </div>
+                    <div class="pure-u-1 pure-u-md-1-2">
+                        <label for="utenteInizio">Verificato da</label>
+                        <input id="utenteInizio" data-bind="utenteInizio" class="pure-u-23-24" type="text">
+                    </div>
+                    
+                    <div class="pure-u-1 pure-u-md-1-2">
+                            <label for="esito">Esito</label>
+                            <select id="esito" data-bind="esito" class="pure-input-23-24" required>
+                                <option value="0">Positivo</option>
+                                <option value="1">Negativo</option>
+                            </select>
+                    </div>
+
+                    <div class="pure-u-1 pure-u-md-1-2">
+                        <label for="azienda">Taratore/Distributore</label>
+                        <select id="azienda" data-bind="azienda" class="pure-input-1-2" required>
+                            <option value="-1"></option>
+                            ${this.aziende.map(v => this.renderOptions(v))}
+                        </select>
+                    </div>
+
+                    ${this.createDocumentiView()}
+
+                </div>
+                <input type="submit" class="pure-button pure-button-primary" value="Salva" />
+            </fieldset>
+        </form>
+        `;
+    }
     createDocumentiView() {
         return html`
             <div class="pure-u-1">
@@ -165,6 +268,33 @@ export default class FuoriServizioCreateView extends ApElementView {
                         </div>
                     </div>
                 </fieldset>
+            </div>
+        `;
+    }
+
+    createApparecchiaturaView() {
+        return html`
+            <div class="pure-u-1">
+                <div class="pure-g">
+                    <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <label>
+                            <span class="label">Codice</span>
+                            <span class="content">${this.apparecchiatura.codice}</span>
+                        </label>
+                    </div>
+                    <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <label>
+                            <span class="label">Descrizione</span>
+                            <span class="content">${this.apparecchiatura.descrizione}</span>
+                        </label>
+                    </div>
+                    <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <label>
+                            <span class="label">Matricola</span>
+                            <span class="content">${this.apparecchiatura.matricola}</span>
+                        </label>
+                    </div>
+                </div>
             </div>
         `;
     }
