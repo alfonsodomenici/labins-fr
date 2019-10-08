@@ -144,11 +144,11 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                                 </div>
                                 <div class="pure-u-1 pure-u-md-1-3">
                                     <label for="campoMin">Min</label>
-                                    <input id="campoMin" data-bind="campoMin" class="pure-u-23-24" type="number">
+                                    <input id="campoMin" data-bind="campoMin" class="pure-u-23-24" type="number" value="0">
                                 </div>
                                 <div class="pure-u-1 pure-u-md-1-3">
                                     <label for="campoMax">Max</label>
-                                    <input id="campoMax" data-bind="campoMax" class="pure-u-23-24" type="number">
+                                    <input id="campoMax" data-bind="campoMax" class="pure-u-23-24" type="number" value="0">
                                 </div>
                                 <div class="pure-u-1 pure-u-md-1-3">
                                     <label for="um">Unita di Misura</label>

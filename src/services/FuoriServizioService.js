@@ -23,6 +23,25 @@ export default class FuoriServizioService extends AbstractService {
         return await resp.json();
     }
 
+    async findVerificaIntermediaMancante() {
+        const resp = await fetch(`${this.url}?vi=true`, {
+            method: 'GET',
+            headers: this.headers
+        });
+        return await resp.json();
+    }
+
+    async findLastFuoriServizio() {
+        return await fetch(`${this.url}?fs=true&last=true`, {
+            method: 'GET',
+            headers: this.headers
+        }).then(resp => resp.json())
+            .then(json => {
+                return  json.size === 0 ? async _ => {} : this.find(json.fuoriServizi[0].id);
+            });
+
+    }
+
     async status() {
         const resp = await fetch(`${this.url}/status`, {
             method: 'GET',
