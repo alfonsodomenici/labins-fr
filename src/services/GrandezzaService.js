@@ -1,6 +1,6 @@
-import AbstractService from './AbstractService.js';
+import RestService from './RestService.js';
 
-export default class GrandezzaService extends AbstractService{
+export default class GrandezzaService extends RestService{
 
     constructor(){
         super();

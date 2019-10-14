@@ -1,6 +1,6 @@
-import AbstractService from './AbstractService.js';
+import RestService from './RestService.js';
 
-export default class DominioService extends AbstractService{
+export default class DominioService extends RestService{
 
     constructor({uri,idLab}){
         super();

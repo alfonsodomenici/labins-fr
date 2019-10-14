@@ -79,20 +79,31 @@ export default class ApparecchiaturaCreateView extends ApElementView {
             <form class="pure-form pure-form-stacked" @submit=${e => this.onsave(e)}>
                 <div class="pure-g">
                     <div class="pure-u-1">
-                        <div class="pure-g">
-                            <div class="pure-u-1 pure-u-md-1-3">
-                                <label for="codice">Codice</label>
-                                <input id="codice" data-bind="codice" required class="pure-u-23-24" type="text">
+                        <fieldset>
+                            <legend>Dati Apparecchiatura</legend>
+                            <div class="pure-g">
+                                <div class="pure-u-1 pure-u-md-1-2">
+                                    <label for="modello">Modello</label>
+                                    <input id="modello" data-bind="modello" required class="pure-u-23-24" type="text">
+                                </div>
+                                <div class="pure-u-1 pure-u-md-1-2">
+                                    <label for="matricola">Matricola</label>
+                                    <input id="matricola" data-bind="matricola" required class="pure-u-23-24" type="text">
+                                </div>
+                                <div class="pure-u-1 pure-u-md-1-3">
+                                    <label for="descrizione">Descrizione</label>
+                                    <input id="descrizione" data-bind="descrizione" class="pure-u-23-24" type="text">
+                                </div>
+                                <div class="pure-u-1 pure-u-md-1-3">
+                                    <label for="codice">Codice</label>
+                                    <input id="codice" data-bind="codice" class="pure-u-23-24" type="text">
+                                </div>
+                                <div class="pure-u-1 pure-u-md-1-3">
+                                    <label for="firmware">Firmware</label>
+                                    <input id="firmware" data-bind="firmware" class="pure-u-23-24" type="text">
+                                </div>
                             </div>
-                            <div class="pure-u-1 pure-u-md-1-3">
-                                <label for="descrizione">Descrizione</label>
-                                <input id="descrizione" data-bind="descrizione" required class="pure-u-23-24" type="text">
-                            </div>
-                            <div class="pure-u-1 pure-u-md-1-3">
-                                <label for="matricola">Matricola</label>
-                                <input id="matricola" data-bind="matricola" class="pure-u-23-24" type="text">
-                            </div>
-                        </div>
+                        </fieldset>
                     </div>
                     <div class="pure-u-1 pure-u-md-1-2">
                         <fieldset>

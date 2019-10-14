@@ -143,34 +143,48 @@ export default class ApparecchiaturaView extends ApElementView {
 
     createView() {
         return html`
-            <article class="pure-g">
+            <article class="pure-g pure-form">
             <header class="pure-u-1">
-                <div class="pure-g">
-                    <div class="pure-u-1 pure-u-md-1-3 group-view">
-                        <label>
-                            <span class="label">Codice</span>
-                            <span class="content">${this.data.codice}</span>
-                        </label>
+                <fieldset>
+                    <legend>Dati Apparecchiatura</legend>
+                    <div class="pure-g">
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                            <label>
+                                <span class="label">Modello</span>
+                                <span class="content">${this.data.modello}</span>
+                            </label>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                            <label>
+                                <span class="label">Matricola</span>
+                                <span class="content">${this.data.matricola}</span>
+                            </label>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                            <label>
+                                <span class="label">Descrizione</span>
+                                <span class="content">${this.data.descrizione}</span>
+                            </label>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                            <label>
+                                <span class="label">Codice</span>
+                                <span class="content">${this.data.codice}</span>
+                            </label>
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                            <label>
+                                <span class="label">Firmware</span>
+                                <span class="content">${this.data.firmware}</span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="pure-u-1 pure-u-md-1-3 group-view">
-                        <label>
-                            <span class="label">Descrizione</span>
-                            <span class="content">${this.data.descrizione}</span>
-                        </label>
-                    </div>
-                    <div class="pure-u-1 pure-u-md-1-3 group-view">
-                        <label>
-                            <span class="label">Matricola</span>
-                            <span class="content">${this.data.matricola}</span>
-                        </label>
-                    </div>
-                </div>
+                </fieldset>
             </header>
             <section class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                <legend>Ubicazione</legend>
                 <div class="pure-g">
-                    <header class="pure-u-1">
-                        <h3>Ubicazione</h3>
-                    </header>
                     <div class="pure-u-1 group-view">
                         <label>
                             <span class="label">Laboratorio</span>
@@ -196,13 +210,13 @@ export default class ApparecchiaturaView extends ApElementView {
                         </label>
                     </div>
                 </div>
+                </fieldset>
             </section>
 
             <section class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                <legend>Campo di misura</legend>
                 <div class="pure-g">
-                    <header class="pure-u-1">
-                        <h3>Campo di misura</h3>
-                    </header>
                     <div class="pure-u-1 group-view">
                         <label>
                             <span class="label">Grandezza</span>
@@ -240,13 +254,13 @@ export default class ApparecchiaturaView extends ApElementView {
                         </label>
                     </div>
                 </div>
+                </fieldset>
             </section>
 
             <section class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                <legend>Info sull'acquisto</legend>
                 <div class="pure-g">
-                    <header class="pure-u-1">
-                        <h3>Info sull'acquisto</h3>
-                    </header>
                     <div class="pure-u-1 group-view">
                         <label>
                             <span class="label">Data fabbricazione</span>
@@ -278,13 +292,13 @@ export default class ApparecchiaturaView extends ApElementView {
                         </label>
                     </div>
                 </div>
+                </fieldset>
             </section>
 
             <section class="pure-u-1 pure-u-md-1-2">
+                <fieldset>
+                <legend>Flags</legend>
                 <div class="pure-g">
-                    <header class="pure-u-1">
-                        <h3>Flags</h3>
-                    </header>
                     <div class="pure-u-1 group-view">
                         <label>
                             <span class="label">Soggetta a Taratura</span>
@@ -304,6 +318,7 @@ export default class ApparecchiaturaView extends ApElementView {
                         </label>
                     </div>
                 </div>
+                <fieldset>
             </section>
 
             ${this.createTaraturaView()}
@@ -328,10 +343,9 @@ export default class ApparecchiaturaView extends ApElementView {
         if (this.data.taratura) {
             return html`
                 <section class="pure-u-1 pure-u-md-1-2">
+                    <fieldset>
+                    <legend>Gestione Taratura</legend>
                     <div class="pure-g">
-                        <header class="pure-u-1">
-                            <h3>Gestione Taratura</h3>
-                        </header>
                         <div class="pure-u-1 group-view">
                             <label>
                                 <span class="label">Tipo</span>
@@ -348,6 +362,7 @@ export default class ApparecchiaturaView extends ApElementView {
                             </label>
                         </div>
                     </div>
+                    </fieldset>
                 </section>
             `;
         } else {
@@ -359,10 +374,9 @@ export default class ApparecchiaturaView extends ApElementView {
         if (this.data.manutenzione) {
             return html`
                 <section class="pure-u-1 pure-u-md-1-2">
+                    <fieldset>
+                    <legend>Gestione Manutenzione</legend>
                     <div class="pure-g">
-                        <header class="pure-u-1">
-                            <h3>Gestione Manutenzione</h3>
-                        </header>
                         <div class="pure-u-1 group-view">
                             <label>
                                 <span class="label">Tipo</span>
@@ -379,6 +393,7 @@ export default class ApparecchiaturaView extends ApElementView {
                             </label>
                         </div>
                     </div>
+                    </fieldset>
                 </section>
             `;
         } else {
@@ -428,17 +443,16 @@ export default class ApparecchiaturaView extends ApElementView {
         if (this.documenti) {
             return html`
                 <section class="pure-u-1 pure-u-md-1-2">
+                    <fieldset>
+                    <legend>Documentazione associata</legend>
                     <div class="pure-g">
-                        <header class="pure-u-1">
-                            <h3>Documentazione associata</h3>
-                        </header>
-
                         <div class="pure-u-1 group-view">
                             <ul>
                                 ${this.documenti.map(d => html`<li><a @click=${e => this.onDocumentoView(e, d)} href="#">${d.denominazione}</a></li>`)}
                             </ul>
                         </div>
                     </div>
+                    </fieldset>
                 </section>
             `;
         } else {

@@ -1,4 +1,4 @@
-export default class AbstractService{
+export default class RestService{
 
     constructor(){
         this.base = 'http://localhost:8080/labins/api'; 

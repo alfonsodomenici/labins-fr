@@ -120,10 +120,12 @@ export default class ApparecchiaturaListView extends ApElementView {
        <h1>Elenco Apparecchiature</h1>
         <table  class="pure-table pure-table-bordered">
             <thead>
-                <th>codice</th>
-                <th>descrizione</th>
-                <th>tipologia</th>
+                <th>modello</th>
                 <th>matricola</th>
+                <th>descrizione</th>
+                <th>codice</th>
+                <th>firmware</th>
+                <th>tipologia</th>
                 <th>costruttore</th>
                 <th>laboratorio</th>
                 <th>dominio</th>
@@ -150,13 +152,15 @@ export default class ApparecchiaturaListView extends ApElementView {
         `;
     }
 
-    createRow({ id, codice, descrizione, tipologia, matricola, costruttore, laboratorio, dominio }) {
+    createRow({ id, modello,matricola, descrizione, codice, firmware, tipologia, costruttore, laboratorio, dominio }) {
         return html`
             <tr row-key=${id} @click=${e => this.onRowClick(e, id)}>
-                <td>${codice}</td>
-                <td>${descrizione}</td>
-                <td>${tipologia ? tipologia.denominazione : ''}</td>
+                <td>${modello}</td>
                 <td>${matricola}</td>
+                <td>${descrizione}</td>
+                <td>${codice}</td>
+                <td>${firmware}</td>
+                <td>${tipologia ? tipologia.denominazione : ''}</td>
                 <td>${costruttore ? costruttore.denominazione : ''}</td>
                 <td>${laboratorio ? laboratorio.denominazione : ''}</td>
                 <td>${dominio ? dominio.denominazione : ''}</td>

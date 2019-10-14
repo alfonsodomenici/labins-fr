@@ -1,6 +1,6 @@
-import AbstractService from './AbstractService.js';
+import RestService from './RestService.js';
 
-export default class UnitaMisuraService extends AbstractService{
+export default class UnitaMisuraService extends RestService{
 
     constructor(){
         super();

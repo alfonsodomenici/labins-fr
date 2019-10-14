@@ -11,11 +11,11 @@ export default class ApElementView extends ApElement {
         console.log(params);
     }
 
-    changeView(){
+    changeView() {
         super.changeView();
         this.fields = Array.from(this.root.querySelectorAll('[data-bind]'));
     }
-        
+
     dataToUi(data) {
         if (data) {
             this.fields.forEach(v => {
@@ -47,7 +47,7 @@ export default class ApElementView extends ApElement {
      * @param {*} path 
      */
     getVal(object, path) {
-        return path.split('.').reduce((res, prop) => (res && res[prop]) ? res[prop] : null, object);
+        return path.split('.').reduce((res, prop) => (res && res[prop] !== undefined) ? res[prop] : null, object);
     }
 
     setVal(object = {}, value, path) {
@@ -97,9 +97,9 @@ export default class ApElementView extends ApElement {
             return input.value ? input.value : null;
         } else if (input.type === 'checkbox') {
             return input.checked;
-        }else if (input.type === 'date') {
+        } else if (input.type === 'date') {
             return input.value ? input.value : null;
-        }else if (input.type === 'file') {
+        } else if (input.type === 'file') {
             return input.files[0]
         }
     }
@@ -111,6 +111,8 @@ export default class ApElementView extends ApElement {
         if (input.type === 'checkbox') {
             input.checked = value;
         } else {
+            console.log(input);
+            console.log(value);
             input.value = value;
         }
     }
@@ -119,7 +121,7 @@ export default class ApElementView extends ApElement {
         if (!select) {
             return null;
         }
-        return  select.value ? DateFunction.isNumeric(select.value) ? { id: Number(select.value) } : select.value : null;
+        return select.value ? DateFunction.isNumeric(select.value) ? { id: Number(select.value) } : select.value : null;
     }
 
     writeSelectValue(select, value) {

@@ -1,6 +1,6 @@
-import AbstractService from './AbstractService.js';
+import RestService from './RestService.js';
 
-export default class TipoApparecchiaturaService extends AbstractService{
+export default class TipoApparecchiaturaService extends RestService{
 
     constructor({uri,idLab}){
         super();

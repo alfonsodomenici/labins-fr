@@ -1,6 +1,6 @@
-import AbstractService from './AbstractService.js';
+import RestService from './RestService.js';
 
-export default class LaboratorioService extends AbstractService{
+export default class LaboratorioService extends RestService{
 
     constructor(){
        super();

@@ -42,6 +42,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.grandezze = values[4];
             this.um = values[5];
             this.data = values[6];
+            console.log(this.data);
             this.documenti = values[7].documenti;
             this.taratura = this.data.taratura;
             this.manutenzione = this.data.manutenzione;
@@ -99,26 +100,35 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
         <form class="pure-form pure-form-stacked" @submit=${e => this.onsave(e)}>
             <div class="pure-g">
                 <div class="pure-u-1">
+                    <fieldset>
+                    <legend>Dati Apparecchiatura</legend>
                     <div class="pure-g">
-                        <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
                             <label>
-                                <span class="label">Codice</span>
-                                <span class="content">${this.data.codice}</span>
+                                <span class="label">Modello</span>
+                                <span class="content">${this.data.modello}</span>
                             </label>
                         </div>
-                        <div class="pure-u-1 pure-u-md-1-3 group-view">
-                            <label>
-                                <span class="label">Descrizione</span>
-                                <span class="content">${this.data.descrizione}</span>
-                            </label>
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-3 group-view">
+                        <div class="pure-u-1 pure-u-md-1-2 group-view">
                             <label>
                                 <span class="label">Matricola</span>
                                 <span class="content">${this.data.matricola}</span>
                             </label>
                         </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="descrizione">Descrizione</label>
+                            <input id="descrizione" data-bind="descrizione" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="codice">Codice</label>
+                            <input id="codice" data-bind="codice" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="firmware">Firmware</label>
+                            <input id="firmware" data-bind="firmware" class="pure-u-23-24" type="text">
+                        </div>
                     </div>
+                    </fieldset>
                 </div>
                 <div class="pure-u-1 pure-u-md-1-2">
                     <fieldset>

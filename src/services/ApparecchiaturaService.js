@@ -1,6 +1,6 @@
-import AbstractService from './AbstractService.js';
+import RestService from './RestService.js';
 
-export default class ApparecchiaturaService extends AbstractService {
+export default class ApparecchiaturaService extends RestService {
 
     constructor({ uri }) {
         super();
@@ -50,6 +50,7 @@ export default class ApparecchiaturaService extends AbstractService {
 
     async update(apparecchiatura) {
         try {
+            console.log(apparecchiatura);
             this.headers.set('Content-Type', 'application/json');
             const resp = await fetch(`${this.url}/${apparecchiatura.id}`, {
                 method: 'PUT',
