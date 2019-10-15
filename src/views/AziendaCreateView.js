@@ -12,14 +12,12 @@ export default class AziendaCreateView extends ApElementView {
 
     connectedCallback() {
         this.changeView();
-        this.dataToUi();
     }
 
     onsave(e) {
         e.preventDefault();
         const entity = {};
         this.uiToData(entity);
-        console.log(entity);
         this.service.create(entity)
             .then(msg => console.log(msg));
 

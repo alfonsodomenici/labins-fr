@@ -42,7 +42,6 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.grandezze = values[4];
             this.um = values[5];
             this.data = values[6];
-            console.log(this.data);
             this.documenti = values[7].documenti;
             this.taratura = this.data.taratura;
             this.manutenzione = this.data.manutenzione;

@@ -34,4 +34,8 @@ export default class ApElement extends HTMLElement {
     createView() {
         throw new Error("abstract method call");
     }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 }

@@ -17,7 +17,7 @@ export default class ApparecchiaturaListView extends ApElementView {
 
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
-        this.params = {...this.params, id: id, suburi: this.selected.link.uri};
+        this.params = { ...this.params, id: id, suburi: this.selected.link.uri };
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         if (old) {
@@ -81,7 +81,6 @@ export default class ApparecchiaturaListView extends ApElementView {
 
     onDelete(e) {
         e.preventDefault();
-        console.log('ondelete...');
         this.service.delete(this.params.id).then(_ => {
             this.selected = null;
             this.params.id = null;
@@ -120,6 +119,7 @@ export default class ApparecchiaturaListView extends ApElementView {
        <h1>Elenco Apparecchiature</h1>
         <table  class="pure-table pure-table-bordered">
             <thead>
+                <th>data pianificata</th>
                 <th>modello</th>
                 <th>matricola</th>
                 <th>descrizione</th>
@@ -152,9 +152,10 @@ export default class ApparecchiaturaListView extends ApElementView {
         `;
     }
 
-    createRow({ id, modello,matricola, descrizione, codice, firmware, tipologia, costruttore, laboratorio, dominio }) {
+    createRow({ id, dataPianificata, modello, matricola, descrizione, codice, firmware, tipologia, costruttore, laboratorio, dominio }) {
         return html`
             <tr row-key=${id} @click=${e => this.onRowClick(e, id)}>
+                <td>${dataPianificata}</td>
                 <td>${modello}</td>
                 <td>${matricola}</td>
                 <td>${descrizione}</td>

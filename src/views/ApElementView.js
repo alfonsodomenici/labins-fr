@@ -1,5 +1,5 @@
 import ApElement from "./../ApElement.js";
-import { html } from "./../../node_modules/lit-html/lit-html.js"
+import { html } from "./../../node_modules/lit-html/lit-html.js";
 import DateFunction from "./../DateFunction.js";
 
 export default class ApElementView extends ApElement {
@@ -31,7 +31,7 @@ export default class ApElementView extends ApElement {
     uiToData(data) {
         this.fields.forEach(v => {
             //console.dir(v)
-            if (v instanceof HTMLInputElement) {
+            if (v instanceof HTMLInputElement || v instanceof HTMLTextAreaElement) {
                 //Reflect.set(data, v.dataset.bind, this.readInputValue(v));
                 this.setVal(data, this.readInputValue(v), v.dataset.bind)
             } else if (v instanceof HTMLSelectElement) {
@@ -111,8 +111,6 @@ export default class ApElementView extends ApElement {
         if (input.type === 'checkbox') {
             input.checked = value;
         } else {
-            console.log(input);
-            console.log(value);
             input.value = value;
         }
     }

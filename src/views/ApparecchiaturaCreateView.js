@@ -63,7 +63,6 @@ export default class ApparecchiaturaCreateView extends ApElementView {
     }
 
     onAddDocumento(e) {
-        console.log(e.detail);
         this.uploads.push(e.detail);
         this.changeView();
     }

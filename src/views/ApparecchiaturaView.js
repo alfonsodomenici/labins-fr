@@ -20,7 +20,6 @@ export default class ApparecchiaturaView extends ApElementView {
             this.data = values[0];
             this.documenti = values[1].documenti;
             this.fsStatus = values[2];
-            console.log(this.fsStatus);
             this.changeView();
         }
         );

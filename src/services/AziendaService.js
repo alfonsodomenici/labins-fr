@@ -8,81 +8,26 @@ export default class AziendaService extends RestService {
     }
 
     async all() {
-        const resp = await fetch(this.url, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(this.url);
     }
 
     async searchByTipo(tipo) {
-        const resp = await fetch(`${this.url}?tipo=${tipo}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}?tipo=${tipo}`);
     }
 
     async find(id) {
-        const resp = await fetch(`${this.url}/${id}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}/${id}`);
     }
 
     async create(azienda) {
-        try {
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}`, {
-                method: 'POST',
-                headers: this.headers,
-                body: JSON.stringify(azienda)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.text();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
-
+        return await this._postJsonData(this.url, azienda);
     }
 
     async update(azienda) {
-        try {
-            console.log(JSON.stringify(azienda));
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}/${azienda.id}`, {
-                method: 'PUT',
-                headers: this.headers,
-                body: JSON.stringify(azienda)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
-
+        return await this._putJsonData(`${this.url}/${azienda.id}`, azienda);
     }
 
     async delete(id) {
-        try {
-            this.headers.delete('Content-Type');
-            console.log(`${this.url}/${id}`);
-            const resp = await fetch(`${this.url}/${id}`, {
-                method: 'DELETE',
-                headers: this.headers
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return resp;
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
-
+        return await this._deleteJsonData(`${this.url}/${id}`);
     }
 }

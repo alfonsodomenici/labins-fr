@@ -89,7 +89,6 @@ export default class LaboratorioListView extends ApElementView {
 
     onDelete(e) {
         e.preventDefault();
-        console.log('ondelete...');
         this.service.delete(this.selected.id).then(_ => {
             this.selected = null;
             this.loadData();
