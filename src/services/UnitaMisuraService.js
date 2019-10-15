@@ -8,10 +8,6 @@ export default class UnitaMisuraService extends RestService{
     }
 
     async all() {
-        const resp = await fetch(this.url, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(this.url);
     }
 }

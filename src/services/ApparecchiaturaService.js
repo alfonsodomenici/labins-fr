@@ -8,134 +8,50 @@ export default class ApparecchiaturaService extends RestService {
     }
 
     async search({ idDom, idTipo, idAz, idDistr, idMan, idTar, start, pageSize }) {
-        const resp = await fetch(`${this.url}?idDom=${idDom}&idTipo=${idTipo}&idAz=${idAz}&idDistr=${idDistr}&idMan=${idMan}&idTar=${idTar}&start=${start}&page=${pageSize}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}?idDom=${idDom}&idTipo=${idTipo}&idAz=${idAz}&idDistr=${idDistr}&idMan=${idMan}&idTar=${idTar}&start=${start}&page=${pageSize}`);
     }
 
     async findDiRiferimento() {
-        const resp = await fetch(`${this.url}/riferimento`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}/riferimento`);
     }
 
     async find(id) {
-        const resp = await fetch(`${this.url}/${id}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}/${id}`);
     }
 
     async create(apparecchiatura) {
-        try {
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}`, {
-                method: 'POST',
-                headers: this.headers,
-                body: JSON.stringify(apparecchiatura)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._postJsonData(`${this.url}`, apparecchiatura);
     }
 
     async update(apparecchiatura) {
-        try {
-            console.log(apparecchiatura);
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}/${apparecchiatura.id}`, {
-                method: 'PUT',
-                headers: this.headers,
-                body: JSON.stringify(apparecchiatura)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._putJsonData(`${this.url}/${apparecchiatura.id}`, apparecchiatura);
     }
 
     async delete(id) {
-        try {
-            this.headers.delete('Content-Type');
-            const resp = await fetch(`${this.url}/${id}`, {
-                method: 'DELETE',
-                headers: this.headers
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return resp;
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._deleteJsonData(`${this.url}/${id}`);
     }
 
     async findDocumenti(id) {
         console.log('find documenti for apparecchiatura ' + id);
-        const resp = await fetch(`${this.url}/${id}/documenti`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}/${id}/documenti`);
     }
 
     async downloadDocumento(id, idDocumento) {
-        const resp = await fetch(`${this.url}/${id}/documenti/${idDocumento}/download`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.blob();
+        return await this._getBlobData(`${this.url}/${id}/documenti/${idDocumento}/download`);
     }
 
     async uploadDocumento(id, { tipo, mediaType, denominazione, file, fileData, }) {
-        try {
-            this.headers.delete('Content-Type');
-            const formData = new FormData();
-            formData.append('tipo', tipo.id);
-            formData.append('mediaType', mediaType);
-            formData.append('denominazione', denominazione);
-            formData.append('fileName', file);
-            formData.append('uploadedFile', fileData);
-            const resp = await fetch(`${this.url}/${id}/documenti/`, {
-                method: 'POST',
-                headers: this.headers,
-                body: formData
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        const formData = new FormData();
+        formData.append('tipo', tipo.id);
+        formData.append('mediaType', mediaType);
+        formData.append('denominazione', denominazione);
+        formData.append('fileName', file);
+        formData.append('uploadedFile', fileData);
+        return await this._postFormData(`${this.url}/${id}/documenti/`, formData);
     }
 
     async deleteDocumento(id, idDocumento) {
-        try {
-            this.headers.delete('Content-Type');
-            const resp = await fetch(`${this.url}/${id}/documenti/${idDocumento}`, {
-                method: 'DELETE',
-                headers: this.headers
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.text();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._deleteJsonData(`${this.url}/${id}/documenti/${idDocumento}`);
     }
 
     async updloadDocumenti(id, docs) {
@@ -159,21 +75,8 @@ export default class ApparecchiaturaService extends RestService {
         );
     }
 
-    async createFuoriServizio(id,fuoriServizio) {
-        try {
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}/${id}/fuori-servizi/`, {
-                method: 'POST',
-                headers: this.headers,
-                body: JSON.stringify(fuoriServizio)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+    async createFuoriServizio(id, fuoriServizio) {
+        return await this._postJsonData(`${this.url}/${id}/fuori-servizi/`, fuoriServizio);
     }
 
     /*
