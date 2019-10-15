@@ -13,6 +13,7 @@ export default class FuoriServizioCreateView extends ApElementView {
         this.appService = new ApparecchiaturaService(params);
         this.azService = new AziendaService();
         this.uploads = [];
+        this.documenti = [];
         this.motivo = 0;
         this.motivoOptions = [{ id: 0, denominazione: 'Manutenzione' }, { id: 1, denominazione: 'Taratura' }, { id: 2, denominazione: 'Verifica Intermedia' }, { id: 3, denominazione: 'Fuori Servizio Straordinario' }];
         this.esitoOptions = [{ id: 0, denominazione: 'Positivo' }, { id: 1, denominazione: 'Negativo' }];
@@ -54,7 +55,6 @@ export default class FuoriServizioCreateView extends ApElementView {
             this.apparecchiatureRif = values[1];
             this.apparecchiatura = values[2];
             this.viRequired = values[3].fuoriServizi;
-            console.log(this.viRequired);
             this.changeView();
         }
         );
@@ -75,7 +75,7 @@ export default class FuoriServizioCreateView extends ApElementView {
 
     update() {
         this.uiToData(this.data);
-        this.service.updateDocumenti(this.params.id, this.uploads, this.documenti.filter(v => v.todelete))
+        this.service.updateDocumenti(this.data.id, this.uploads, this.documenti.filter(v => v.todelete))
             .then(() => Promise.all([
                 this.service.update(this.data),
                 this.service.findDocumenti(this.data.id)
@@ -338,6 +338,7 @@ export default class FuoriServizioCreateView extends ApElementView {
                                         <th></th>
                                     </thead>
                                     <tbody>
+                                        ${this.documenti.filter(v => !v.todelete).map(row => this.createDocumentoRow(row))}
                                         ${this.uploads.map(row => this.createDocumentoRow(row))}
                                     </tbody>
                                 </table>

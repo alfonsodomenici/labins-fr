@@ -19,8 +19,18 @@ export default class RestService {
         if (!resp.ok) {
             throw new Error(response.statusText);
         }
-        const json = await resp.json();
-        return json;
+        return await resp.json();
+    }
+
+    async _getBlobData(endpoint) {
+        const resp = await fetch(endpoint, {
+            method: 'GET',
+            headers: this.headers
+        });
+        if (!resp.ok) {
+            throw new Error(response.statusText);
+        }
+        return await resp.blob();
     }
 
     async _postJsonData(endpoint, json) {
@@ -29,6 +39,19 @@ export default class RestService {
             method: 'POST',
             headers: this.headers,
             body: JSON.stringify(json)
+        });
+        if (!resp.ok) {
+            throw new Error(response.statusText);
+        }
+        return await resp.json();
+    }
+
+    async _postFormData(endpoint, formData) {
+        this.headers.delete('Content-Type');
+        const resp = await fetch(endpoint, {
+            method: 'POST',
+            headers: this.headers,
+            body: formData
         });
         if (!resp.ok) {
             throw new Error(response.statusText);

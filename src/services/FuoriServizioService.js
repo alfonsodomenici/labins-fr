@@ -5,155 +5,67 @@ export default class FuoriServizioService extends RestService {
     constructor({ uri }) {
         super();
         this.url += `${uri}/fuori-servizi`;
+        console.log(this.url);
     }
 
     async search({ storico, fs, vi, last, start, pageSize }) {
-        const resp = await fetch(`${this.url}?storico=${storico}&fs=${fs}&vi=${vi}&last=${last}&start=${start}&page=${pageSize}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}?storico=${storico}&fs=${fs}&vi=${vi}&last=${last}&start=${start}&page=${pageSize}`);
     }
 
     async find(id) {
-        const resp = await fetch(`${this.url}/${id}`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}/${id}`);
     }
 
     async findVerificaIntermediaMancante() {
-        const resp = await fetch(`${this.url}?vi=true`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}?vi=true`);
     }
 
     async findLastFuoriServizio() {
-        return await fetch(`${this.url}?fs=true&last=true`, {
-            method: 'GET',
-            headers: this.headers
-        }).then(resp => resp.json())
+        return await this._getJsonData(`${this.url}?fs=true&last=true`)
             .then(json => {
-                return  json.size === 0 ? async _ => {} : this.find(json.fuoriServizi[0].id);
+                console.log(json);  
+                return json.size === 0 ? async _ => { } : this.find(json.fuoriServizi[0].id);
             });
 
     }
 
     async status() {
-        const resp = await fetch(`${this.url}/status`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        return await this._getJsonData(`${this.url}/status`);
     }
 
     async create(fuoriServizio) {
-        try {
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}`, {
-                method: 'POST',
-                headers: this.headers,
-                body: JSON.stringify(fuoriServizio)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._postJsonData(this.url, fuoriServizio);
     }
 
     async update(fuoriServizio) {
-        try {
-            this.headers.set('Content-Type', 'application/json');
-            const resp = await fetch(`${this.url}/${fuoriServizio.id}`, {
-                method: 'PUT',
-                headers: this.headers,
-                body: JSON.stringify(fuoriServizio)
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._putJsonData(`${this.url}/${fuoriServizio.id}`, fuoriServizio);
     }
 
     async delete(id) {
-        try {
-            this.headers.delete('Content-Type');
-            const resp = await fetch(`${this.url}/${id}`, {
-                method: 'DELETE',
-                headers: this.headers
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return resp;
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._deleteJsonData(`${this.url}/${id}`);
     }
 
     async findDocumenti(id) {
-        console.log('find documenti for apparecchiatura ' + id);
-        const resp = await fetch(`${this.url}/${id}/documenti`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.json();
+        console.log('find documenti for fuori servizio ' + id);
+        return await this._getJsonData(`${this.url}/${id}/documenti`);
     }
 
     async downloadDocumento(id, idDocumento) {
-        const resp = await fetch(`${this.url}/${id}/documenti/${idDocumento}/download`, {
-            method: 'GET',
-            headers: this.headers
-        });
-        return await resp.blob();
+        return await this._getBlobData(`${this.url}/${id}/documenti/${idDocumento}/download`);
     }
 
     async uploadDocumento(id, { tipo, mediaType, denominazione, file, fileData, }) {
-        try {
-            this.headers.delete('Content-Type');
-            const formData = new FormData();
-            formData.append('tipo', tipo.id);
-            formData.append('mediaType', mediaType);
-            formData.append('denominazione', denominazione);
-            formData.append('fileName', file);
-            formData.append('uploadedFile', fileData);
-            const resp = await fetch(`${this.url}/${id}/documenti/`, {
-                method: 'POST',
-                headers: this.headers,
-                body: formData
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.json();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        const formData = new FormData();
+        formData.append('tipo', tipo.id);
+        formData.append('mediaType', mediaType);
+        formData.append('denominazione', denominazione);
+        formData.append('fileName', file);
+        formData.append('uploadedFile', fileData);
+        return await this._postFormData(`${this.url}/${id}/documenti/`, formData);
     }
 
     async deleteDocumento(id, idDocumento) {
-        try {
-            this.headers.delete('Content-Type');
-            const resp = await fetch(`${this.url}/${id}/documenti/${idDocumento}`, {
-                method: 'DELETE',
-                headers: this.headers
-            });
-            if (!resp.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            return await resp.text();
-        } catch (error) {
-            console.log('There has been a problem with your fetch operation: ', error.message);
-        }
+        return await this._deleteJsonData(`${this.url}/${id}/documenti/${idDocumento}`);
     }
 
     async updloadDocumenti(id, docs) {
@@ -170,6 +82,8 @@ export default class FuoriServizioService extends RestService {
 
     async updateDocumenti(id, toadd, todelete) {
         const docs = [...toadd, ...todelete];
+        console.log(id);
+        console.log(docs);
         return await Promise.all(
             docs.map(async v => {
                 return await v.todelete ? this.deleteDocumento(id, v.id) : this.uploadDocumento(id, v);
