@@ -58,6 +58,7 @@ export default class ApparecchiaturaView extends ApElementView {
     onDelete(e) {
 
     }
+
     onStorico(e) {
         e.preventDefault();
         const event = new CustomEvent(
@@ -91,6 +92,7 @@ export default class ApparecchiaturaView extends ApElementView {
     onDeroga(e) {
 
     }
+
     onVerificaIntermedia(e) {
         e.preventDefault();
         const event = new CustomEvent(
@@ -105,6 +107,7 @@ export default class ApparecchiaturaView extends ApElementView {
         );
         this.dispatchEvent(event);
     }
+    
     onInServizio(e) {
         e.preventDefault();
         const event = new CustomEvent(

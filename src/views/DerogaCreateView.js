@@ -29,9 +29,17 @@ export default class DerogaCreateView extends ApElementView {
         return html`
         <form class="pure-form pure-form-stacked" @submit=${e => this.onsave(e)}>
             <div class="pure-g">
+                <div class="pure-u-2">
+                    <label for="dataDeroga">Data deroga</label>
+                    <input id="dataDeroga" data-bind="dataDeroga" class="pure-u-23-24" type="date">
+                </div>
+                <div class="pure-u-2">
+                    <label for="dataDeroga">Data deroga</label>
+                    <input id="dataDeroga" data-bind="dataDeroga" class="pure-u-23-24" type="date">
+                </div>
                 <div class="pure-u-1">
-                    <label for="denominazione">Denominazione</label>
-                    <input id="denominazione" data-bind="denominazione" class="pure-u-23-24" type="text" required />
+                    <label for="dataDeroga">Data deroga</label>
+                    <input id="dataDeroga" data-bind="dataDeroga" class="pure-u-23-24" type="date">
                 </div>
             </div>
             <input type="submit" value="Salva" class="pure-button pure-button-primary"/>
