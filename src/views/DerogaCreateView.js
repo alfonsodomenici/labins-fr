@@ -1,12 +1,12 @@
 import ApElementView from "./ApElementView.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
-import LaboratorioService from "./../services/LaboratorioService.js";
+import DerogaService from "../services/DerogaService.js";
 
 export default class DerogaCreateView extends ApElementView {
 
     constructor() {
         super({});
-        this.service = new LaboratorioService();
+        this.service = new DerogaService({ uri: this.params.suburi });
     }
 
     connectedCallback() {
@@ -33,13 +33,15 @@ export default class DerogaCreateView extends ApElementView {
                     <label for="dataDeroga">Data deroga</label>
                     <input id="dataDeroga" data-bind="dataDeroga" class="pure-u-23-24" type="date">
                 </div>
-                <div class="pure-u-2">
-                    <label for="dataDeroga">Data deroga</label>
-                    <input id="dataDeroga" data-bind="dataDeroga" class="pure-u-23-24" type="date">
+                <div class="pure-u-1 pure-u-md-1-2">
+                    <label for="fs">Fuori Servizio collegato</label>
+                    <select id="fs" data-bind="parent" class="pure-input-1-2" required>
+                        ${this.viRequired.map(v => this.renderOptions(v))}
+                    </select>
                 </div>
                 <div class="pure-u-1">
-                    <label for="dataDeroga">Data deroga</label>
-                    <input id="dataDeroga" data-bind="dataDeroga" class="pure-u-23-24" type="date">
+                    <label for="motivazione">Motivazione</label>
+                    <textarea id="motivazione" data-bind="motivazione" class="pure-u-23-24"></textarea>
                 </div>
             </div>
             <input type="submit" value="Salva" class="pure-button pure-button-primary"/>

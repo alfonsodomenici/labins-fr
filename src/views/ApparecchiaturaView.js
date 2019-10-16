@@ -90,7 +90,18 @@ export default class ApparecchiaturaView extends ApElementView {
     }
 
     onDeroga(e) {
-
+        e.preventDefault();
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link: 'DerogaCreate',
+                params: this.params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
     }
 
     onVerificaIntermedia(e) {

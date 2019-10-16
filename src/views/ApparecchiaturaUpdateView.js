@@ -3,7 +3,7 @@ import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import ApparecchiaturaService from "./../services/ApparecchiaturaService.js";
 import DominioService from "./../services/DominioService.js";
 import AziendaService from "./../services/AziendaService.js";
-import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService.js";
+import TipoApparecchiaturaService from "./../services/TipoApparecchiaturaService.js";
 import LaboratorioService from "./../services/LaboratorioService.js";
 import GrandezzaService from "../services/GrandezzaService.js";
 import UnitaMisuraService from "../services/UnitaMisuraService.js";
@@ -17,7 +17,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
         this.labService = new LaboratorioService(params);
         this.domService = new DominioService(params);
         this.azService = new AziendaService();
-        this.tappService = new TipoApperecchiaturaService(params);
+        this.tappService = new TipoApparecchiaturaService(params);
         this.grandezzaService = new GrandezzaService();
         this.umService = new UnitaMisuraService();
         this.uploads = [];
@@ -28,7 +28,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
         Promise.all([
             this.labService.all(),
             this.domService.all(),
-            this.tappService.all(),
+            this.tappService.allMinimal(),
             this.azService.all(),
             this.grandezzaService.all(),
             this.umService.all(),
@@ -54,6 +54,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
     onsave(e) {
         e.preventDefault();
         this.uiToData(this.data);
+        console.log(this.data);
         this.service.updateDocumenti(this.params.id, this.uploads, this.documenti.filter(v => v.todelete))
             .then(() => Promise.all([
                 this.service.update(this.data),

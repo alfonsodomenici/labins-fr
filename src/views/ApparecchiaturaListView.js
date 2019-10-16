@@ -45,6 +45,7 @@ export default class ApparecchiaturaListView extends ApElementView {
             .then(json => {
                 this.count = json.size;
                 this.data = json.apparecchiature;
+                console.log(this.data);
                 render(this.createDataView(), this.root.getElementById('container'));
             })
     }
@@ -127,7 +128,6 @@ export default class ApparecchiaturaListView extends ApElementView {
                 <th>firmware</th>
                 <th>tipologia</th>
                 <th>costruttore</th>
-                <th>laboratorio</th>
                 <th>dominio</th>
             </thead>
             <tbody>
@@ -163,7 +163,6 @@ export default class ApparecchiaturaListView extends ApElementView {
                 <td>${firmware}</td>
                 <td>${tipologia ? tipologia.denominazione : ''}</td>
                 <td>${costruttore ? costruttore.denominazione : ''}</td>
-                <td>${laboratorio ? laboratorio.denominazione : ''}</td>
                 <td>${dominio ? dominio.denominazione : ''}</td>
             </tr>
        `;

@@ -11,4 +11,8 @@ export default class TipoApparecchiaturaService extends RestService{
     async all() {
         return await this._getJsonData(this.url);
     }
+
+    async allMinimal() {
+        return await this._getJsonData(`${this.url}/minimal`);
+    }
 }

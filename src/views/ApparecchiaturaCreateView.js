@@ -5,7 +5,7 @@ import GrandezzaService from "../services/GrandezzaService.js";
 import UnitaMisuraService from "../services/UnitaMisuraService.js";
 import DominioService from "./../services/DominioService.js";
 import AziendaService from "./../services/AziendaService.js";
-import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService.js";
+import TipoApparecchiaturaService from "./../services/TipoApparecchiaturaService.js";
 import LaboratorioService from "./../services/LaboratorioService.js";
 import DocumentoCreateView from "./DocumentoCreateView.js";
 
@@ -16,7 +16,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
         this.service = new ApparecchiaturaService(params);
         this.domService = new DominioService(params);
         this.azService = new AziendaService();
-        this.tappService = new TipoApperecchiaturaService(params);
+        this.tappService = new TipoApparecchiaturaService(params);
         this.grandezzaService = new GrandezzaService();
         this.umService = new UnitaMisuraService();
         this.labService = new LaboratorioService();
@@ -26,7 +26,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
     connectedCallback() {
         Promise.all([
             this.domService.all(),
-            this.tappService.all(),
+            this.tappService.allMinimal(),
             this.azService.all(),
             this.grandezzaService.all(),
             this.umService.all(),

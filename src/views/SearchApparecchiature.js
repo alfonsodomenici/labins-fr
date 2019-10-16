@@ -1,7 +1,7 @@
 import DateFunction from "../DateFunction.js";
 import DominioService from "./../services/DominioService.js";
 import AziendaService from "./../services/AziendaService.js";
-import TipoApperecchiaturaService from "./../services/TipoApparecchiaturaService.js";
+import TipoApparecchiaturaService from "./../services/TipoApparecchiaturaService.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import ApElement from "../ApElement.js";
 
@@ -16,10 +16,10 @@ export default class SearchApparecchiature extends ApElement {
         const params = JSON.parse(this.getAttribute('params'));
         this.domService = new DominioService(params);
         this.azService = new AziendaService();
-        this.tappService = new TipoApperecchiaturaService(params);
+        this.tappService = new TipoApparecchiaturaService(params);
         Promise.all([
             this.domService.all(),
-            this.tappService.all(),
+            this.tappService.allMinimal(),
             this.azService.all()
         ]).then(values => {
             this.domini = values[0];
@@ -55,7 +55,7 @@ export default class SearchApparecchiature extends ApElement {
                                 <label>Tipo
                                     <select name="tipo">
                                         <option value='-1'>nessun tipo</option>
-                                        ${this.tipi.map(p => html`<option value="${p.id}">${p.descrizione}</option value>`)}
+                                        ${this.tipi.map(p => html`<option value="${p.id}">${p.denominazione}</option value>`)}
                                     </select>
                                 </label>
                             </div>
