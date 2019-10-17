@@ -5,7 +5,6 @@ export default class FuoriServizioService extends RestService {
     constructor({ uri }) {
         super();
         this.url += `${uri}/fuori-servizi`;
-        console.log(this.url);
     }
 
     async search({ storico, fs, vi, last, start, pageSize }) {
