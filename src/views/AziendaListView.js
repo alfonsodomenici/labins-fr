@@ -1,21 +1,36 @@
 import AziendaService from './../services/AziendaService.js'
-import ApElementView from "./ApElementView.js";
+import ApElementView from "./../ApElementView.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js"
-import Paginator from "./Paginator.js";
+import SearchAziende from "./SearchAziende.js";
+import Paginator from "./../Paginator.js";
 
 export default class AziendaListView extends ApElementView {
 
     constructor() {
         super({});
         this.service = new AziendaService();
+        this.criteria = {
+            tipo: '',
+            denominazione: '',
+            start: 0,
+            pageSize: this.pageSize
+        }
     }
 
     connectedCallback() {
         this.loadData();
     }
 
+    onSearch(e) {
+        this.detail = e.detail
+        this.criteria = e.detail;
+        this.criteria.start = 0;
+        this.criteria.pageSize = this.pageSize;
+        this.loadData();
+    }
+
     loadData() {
-        this.service.all()
+        this.service.search(this.criteria)
             .then(json => {
                 this.count = json.size;
                 this.data = json.aziende;
@@ -92,6 +107,19 @@ export default class AziendaListView extends ApElementView {
     }
 
     createView() {
+        return html`
+            ${this.createSearchView()}
+            ${this.createDataView()}
+        `;
+    }
+
+    createSearchView() {
+        return html`
+            <search-aziende @search=${e => this.onSearch(e)}></search-aziende>
+        `;
+    }
+
+    createDataView() {
         return html`
         <h1>Elenco Aziende</h1>
         <table  class="pure-table pure-table-bordered">

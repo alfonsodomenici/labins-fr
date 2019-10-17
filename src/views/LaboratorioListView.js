@@ -1,7 +1,7 @@
 import LaboratorioService from './../services/LaboratorioService.js'
-import ApElementView from "./ApElementView.js";
+import ApElementView from "./../ApElementView.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js"
-import Paginator from "./Paginator.js";
+import Paginator from "./../Paginator.js";
 
 export default class LaboratorioListView extends ApElementView {
 

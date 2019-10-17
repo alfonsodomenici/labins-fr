@@ -1,18 +1,28 @@
 import ApparecchiaturaService from './../services/ApparecchiaturaService.js'
-import ApElementView from "./ApElementView.js";
+import ApElementView from "./../ApElementView.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js"
 import SearchApparecchiature from "./SearchApparecchiature.js";
-import Paginator from "./Paginator.js";
+import Paginator from "./../Paginator.js";
 
 export default class ApparecchiaturaListView extends ApElementView {
 
     constructor(params) {
         super(params);
         this.service = new ApparecchiaturaService(params);
+        this.criteria = {
+            idDom: -1,
+            idTipo: -1,
+            idAz: -1,
+            idDistr: -1,
+            idMan: -1,
+            idTar: -1,
+            start: 0,
+            pageSize: this.pageSize
+        }
     }
 
     connectedCallback() {
-        this.changeView();
+        this.loadData();
     }
 
     onRowClick(e, id) {
@@ -45,8 +55,7 @@ export default class ApparecchiaturaListView extends ApElementView {
             .then(json => {
                 this.count = json.size;
                 this.data = json.apparecchiature;
-                console.log(this.data);
-                render(this.createDataView(), this.root.getElementById('container'));
+                this.changeView();
             })
     }
 
@@ -105,13 +114,13 @@ export default class ApparecchiaturaListView extends ApElementView {
     createView() {
         return html`
             ${this.createSearchView()}
+            ${this.createDataView()}
         `;
     }
 
     createSearchView() {
         return html`
             <search-apparecchiature params="${JSON.stringify(this.params)}" @search=${e => this.onSearch(e)}></search-apparecchiature>
-            <div id="container"></div>
         `;
     }
 

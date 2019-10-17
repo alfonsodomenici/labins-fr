@@ -1,4 +1,4 @@
-import ApElementView from "./ApElementView.js";
+import ApElementView from "./../ApElementView.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
 import AziendaService from "./../services/AziendaService.js";
 

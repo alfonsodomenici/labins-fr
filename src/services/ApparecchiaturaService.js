@@ -8,7 +8,7 @@ export default class ApparecchiaturaService extends RestService {
     }
 
     async search({ idDom, idTipo, idAz, idDistr, idMan, idTar, start, pageSize }) {
-        return await this._getJsonData(`${this.url}?idDom=${idDom}&idTipo=${idTipo}&idAz=${idAz}&idDistr=${idDistr}&idMan=${idMan}&idTar=${idTar}&start=${start}&page=${pageSize}`);
+        return await this._getJsonData(`${this.url}?idDom=${idDom}&idTipo=${idTipo}&idAz=${idAz}&idDistr=${idDistr}&idMan=${idMan}&idTar=${idTar}&start=${start}&page-size=${pageSize}`);
     }
 
     async findDiRiferimento() {

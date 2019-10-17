@@ -1,6 +1,6 @@
-import ApElement from "./../ApElement.js";
-import { html } from "./../../node_modules/lit-html/lit-html.js";
-import DateFunction from "./../DateFunction.js";
+import ApElement from "./ApElement.js";
+import { html } from "./../node_modules/lit-html/lit-html.js";
+import DateFunction from "./DateFunction.js";
 
 export default class ApElementView extends ApElement {
 

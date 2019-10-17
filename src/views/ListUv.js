@@ -1,7 +1,7 @@
 import UvService from "../UvService.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import SearchUv from "../views/SearchUv.js";
-import Paginator from "./Paginator.js";
+import Paginator from "./../Paginator.js";
 import DateFunction from "./../DateFunction.js"
 
 export default class ListUv extends HTMLElement {

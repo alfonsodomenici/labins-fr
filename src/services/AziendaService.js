@@ -11,6 +11,10 @@ export default class AziendaService extends RestService {
         return await this._getJsonData(this.url);
     }
 
+    async search({ tipo, denominazione, start, pageSize }) {
+        return await this._getJsonData(`${this.url}?tipo=${tipo}&denominazione=${denominazione}&start=${start}&page-size=${pageSize}`);
+    }
+
     async searchByTipo(tipo) {
         return await this._getJsonData(`${this.url}?tipo=${tipo}`);
     }
