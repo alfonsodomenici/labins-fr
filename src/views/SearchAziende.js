@@ -6,9 +6,18 @@ export default class SearchAziende extends ApElement {
     constructor() {
         super();
         this.oldSearch = {};
+        this.visible = false;
     }
 
     connectedCallback() {
+        this.changeView();
+        this.containerElement = this.root.querySelector('#container');
+        this.containerElement.style.display = 'none'
+    }
+
+    ontoggle(e) {
+        this.containerElement.style.display = this.visible ? 'none' : 'block';
+        this.visible = !this.visible;
         this.changeView();
     }
 
@@ -18,7 +27,8 @@ export default class SearchAziende extends ApElement {
 
     createView() {
         return html`
-                <form method="POST" @submit=${e => this.onsearch(e)} class='pure-form pure-form-stacked'>
+        <button @click=${(e) => this.ontoggle(e)} class='pure-button pure-button-primary'>${this.visible ? 'nascondi filtri' : 'visualizza filtri'}</button>
+                <form id='container' method="POST" @submit=${e => this.onsearch(e)} class='pure-form pure-form-stacked'>
                     <fieldset>
                         <legend>Parametri Ricerca</legend>
                         <div class="pure-g">

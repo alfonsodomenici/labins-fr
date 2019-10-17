@@ -19,7 +19,7 @@ export default class ApElementView extends ApElement {
     dataToUi(data) {
         if (data) {
             this.fields.forEach(v => {
-                if (v instanceof HTMLInputElement) {
+                if (v instanceof HTMLInputElement || v instanceof HTMLTextAreaElement) {
                     this.writeInputValue(v, this.getVal(data, v.dataset.bind));
                 } else if (v instanceof HTMLSelectElement) {
                     this.writeSelectValue(v, this.getVal(data, v.dataset.bind));

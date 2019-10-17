@@ -22,6 +22,7 @@ export default class ApparecchiaturaListView extends ApElementView {
     }
 
     connectedCallback() {
+        this.changeView();
         this.loadData();
     }
 
@@ -55,8 +56,8 @@ export default class ApparecchiaturaListView extends ApElementView {
             .then(json => {
                 this.count = json.size;
                 this.data = json.apparecchiature;
-                this.changeView();
-            })
+                render(this.createDataView(),this.root.querySelector('#data-container'));
+            });
     }
 
     onCreate(e) {
@@ -114,14 +115,14 @@ export default class ApparecchiaturaListView extends ApElementView {
     createView() {
         return html`
             ${this.createSearchView()}
-            ${this.createDataView()}
         `;
     }
 
     createSearchView() {
         return html`
             <search-apparecchiature params="${JSON.stringify(this.params)}" @search=${e => this.onSearch(e)}></search-apparecchiature>
-        `;
+            <div id='data-container' class = 'pure-u-1'></div>
+            `;
     }
 
     createDataView() {

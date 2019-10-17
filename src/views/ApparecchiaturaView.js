@@ -371,7 +371,7 @@ export default class ApparecchiaturaView extends ApElementView {
                         <div class="pure-u-1 group-view">
                             <label>
                                 <span class="label">Taratore</span>
-                                <span class="content">${this.data.gestioneTaratura.azienda}</span>
+                                <span class="content">${this.data.gestioneTaratura.azienda ? this.data.gestioneTaratura.azienda.denominazione : '' }</span>
                             </label>
                         </div>
                     </div>

@@ -10,6 +10,7 @@ export default class SearchApparecchiature extends ApElement {
     constructor() {
         super();
         this.oldSearch = {};
+        this.visible = false;
     }
 
     connectedCallback() {
@@ -26,8 +27,16 @@ export default class SearchApparecchiature extends ApElement {
             this.tipi = values[1];
             this.aziende = values[2].aziende;
             this.changeView();
+            this.containerElement = this.root.querySelector('#container');
+            this.containerElement.style.display = 'none'
         }
         );
+    }
+
+    ontoggle(e) {
+        this.containerElement.style.display = this.visible ? 'none' : 'block';
+        this.visible = !this.visible;
+        this.changeView();
     }
 
     createStyle() {
@@ -36,14 +45,15 @@ export default class SearchApparecchiature extends ApElement {
 
     createView() {
         return html`
-                <form method="POST" @submit=${e => this.onsearch(e)} class='pure-form pure-form-stacked'>
+                <button @click=${(e) => this.ontoggle(e)} class='pure-button pure-button-primary'>${this.visible ? 'nascondi filtri' : 'visualizza filtri'}</button>
+                <form id='container' method="POST" @submit=${e => this.onsearch(e)} class='pure-form pure-form-stacked'>
 
                     <fieldset>
                         <legend>Parametri Ricerca</legend>
             
-                        <div class="pure-g">
+                        <div  class="pure-g">
             
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1 pure-u-md-1-3">
                                 <label>Dominio
                                     <select name="dominio">
                                         <option value='-1'>nessun dominio</option>
@@ -51,7 +61,7 @@ export default class SearchApparecchiature extends ApElement {
                                     </select>
                                 </label>
                             </div>
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1 pure-u-md-1-3">
                                 <label>Tipo
                                     <select name="tipo">
                                         <option value='-1'>nessun tipo</option>
@@ -59,7 +69,7 @@ export default class SearchApparecchiature extends ApElement {
                                     </select>
                                 </label>
                             </div>
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1 pure-u-md-1-3">
                                 <label>Costruttore
                                     <select name="costruttore">
                                         <option value='-1'>nessun costruttore</option>
@@ -69,7 +79,7 @@ export default class SearchApparecchiature extends ApElement {
                                     </select>
                                 </label>
                             </div>
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1 pure-u-md-1-3">
                                 <label>Distributore
                                     <select name="distributore">
                                         <option value='-1'>nessun distributore</option>
@@ -79,7 +89,7 @@ export default class SearchApparecchiature extends ApElement {
                                     </select>
                                 </label>
                             </div>
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1 pure-u-md-1-3">
                                 <label>Manutentore
                                     <select name="manutentore">
                                         <option value='-1'>nessun manutentore</option>
@@ -89,7 +99,7 @@ export default class SearchApparecchiature extends ApElement {
                                     </select>
                                 </label>
                             </div>
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1 pure-u-md-1-3">
                                 <label>Taratore
                                     <select name="taratore">
                                         <option value='-1'>nessun taratore</option>
@@ -99,7 +109,7 @@ export default class SearchApparecchiature extends ApElement {
                                     </select>
                                 </label>
                             </div>
-                            <div class="pure-u-1 pure-u-md-4-24">
+                            <div class="pure-u-1">
                                 <input type="submit" class='pure-button pure-button-primary' value="Cerca" />
                             </div>
                         </div>
