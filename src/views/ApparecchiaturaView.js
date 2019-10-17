@@ -141,10 +141,10 @@ export default class ApparecchiaturaView extends ApElementView {
         return this.fsStatus.isStoricoEmpty ? ` pure-button-disabled` : ``;
     }
     checkFuoriServizioDisabled() {
-        return (this.fsStatus.isFuoriServizio || this.fsStatus.isViRequired) ? ` pure-button-disabled` : ``;
+        return (this.fsStatus.isFuoriServizio) ? ` pure-button-disabled` : ``;
     }
     checkDerogaDisabled() {
-        return (this.fsStatus.isFuoriServizio || this.fsStatus.isFuoriServizio) ? ` pure-button-disabled` : ``;
+        return (this.fsStatus.isFuoriServizio) ? ` pure-button-disabled` : ``;
     }
     checkVerificaIntermediaDisabled() {
         return (this.fsStatus.isFuoriServizio || !this.fsStatus.isViRequired) ? ` pure-button-disabled` : ``;
