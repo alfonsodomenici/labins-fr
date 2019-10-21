@@ -27,6 +27,8 @@ export default class LaboratorioListView extends ApElementView {
         this.selected = this.data.find(v => v.id === id);
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
+        this.params = { ...this.params, id: id, uri: this.selected.link.uri };
+        console.log(this.params);
         if (old) {
             old.classList.toggle('selected');
         }
@@ -41,50 +43,34 @@ export default class LaboratorioListView extends ApElementView {
 
     onCreate(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'LaboratorioCreate'
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'LaboratorioCreate',
+            params: this.params
+        })
     }
 
     onUpdate(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'LaboratorioUpdate',
-                params: {
-                    id: this.selected.id
-                }
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'LaboratorioUpdate',
+            params: this.params
+        })
     }
 
     onViewApparecchiature(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'ApparecchiaturaList',
-                params: {
-                    uri: this.selected.link.uri,
-                }
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'ApparecchiaturaList',
+            params: this.params
+        })
+    }
+
+    onViewDomini(e) {
+        e.preventDefault();
+        this.fireApNavigationEvent({
+            link: 'DominioList',
+            params: this.params
+        })
     }
 
     onDelete(e) {
@@ -93,9 +79,8 @@ export default class LaboratorioListView extends ApElementView {
             this.selected = null;
             this.loadData();
         });
-
     }
-    
+
     createStyle() {
         return html`
             tbody > tr:hover{
@@ -131,6 +116,7 @@ export default class LaboratorioListView extends ApElementView {
                         <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>
                         <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modifica</button>
                         <button  @click=${e => this.onViewApparecchiature(e)} class='pure-button pure-button-primary'>Apparecchiature</button>
+                        <button  @click=${e => this.onViewDomini(e)} class='pure-button pure-button-primary'>Domini</button>
                         <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>
                     </td>
                 </tr>

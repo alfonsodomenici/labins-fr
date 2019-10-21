@@ -32,7 +32,7 @@ export default class ApparecchiaturaCreateView extends ApElementView {
             this.umService.all(),
             this.labService.all()
         ]).then(values => {
-            this.domini = values[0];
+            this.domini = values[0].domini;
             this.tipi = values[1];
             this.aziende = values[2].aziende;
             this.grandezze = values[3];

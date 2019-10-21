@@ -23,7 +23,7 @@ export default class SearchApparecchiature extends ApElement {
             this.tappService.allMinimal(),
             this.azService.all()
         ]).then(values => {
-            this.domini = values[0];
+            this.domini = values[0].domini;
             this.tipi = values[1];
             this.aziende = values[2].aziende;
             this.changeView();

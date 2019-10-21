@@ -29,7 +29,6 @@ export default class FuoriServizioView extends ApElementView {
         e.preventDefault();
         this.service.downloadDocumento(this.params.id, doc.id)
             .then(blob => {
-                console.dir(blob)
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;

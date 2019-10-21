@@ -56,38 +56,24 @@ export default class ApparecchiaturaListView extends ApElementView {
             .then(json => {
                 this.count = json.size;
                 this.data = json.apparecchiature;
-                render(this.createDataView(),this.root.querySelector('#data-container'));
+                render(this.createDataView(), this.root.querySelector('#data-container'));
             });
     }
 
     onCreate(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'ApparecchiaturaCreate',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'ApparecchiaturaCreate',
+            params: this.params
+        })
     }
 
     onViewDetail(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'Apparecchiatura',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'Apparecchiatura',
+            params: this.params
+        })
     }
 
     onDelete(e) {

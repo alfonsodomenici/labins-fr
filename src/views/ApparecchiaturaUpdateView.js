@@ -36,7 +36,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.service.findDocumenti(this.params.id)
         ]).then(values => {
             this.laboratori = values[0].laboratori;
-            this.domini = values[1];
+            this.domini = values[1].domini;
             this.tipi = values[2];
             this.aziende = values[3].aziende;
             this.grandezze = values[4];

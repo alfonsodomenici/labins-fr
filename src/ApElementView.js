@@ -128,4 +128,18 @@ export default class ApElementView extends ApElement {
         }
         select.value = value ? value.id : null;
     }
+
+    fireApNavigationEvent({ link, params }) {
+        const event = new CustomEvent(
+            'ap-navigation', {
+            detail: {
+                link,
+                params
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        this.dispatchEvent(event);
+    }
 }

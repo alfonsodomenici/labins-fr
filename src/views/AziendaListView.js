@@ -42,6 +42,7 @@ export default class AziendaListView extends ApElementView {
         this.selected = this.data.find(v => v.id === id);
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
+        this.params = { ...this.params, id: id};
         if (old) {
             old.classList.toggle('selected');
         }
@@ -56,33 +57,18 @@ export default class AziendaListView extends ApElementView {
 
     onCreate(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'AziendaCreate'
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'AziendaCreate',
+            params: this.params
+        })
     }
 
     onUpdate(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'AziendaUpdate',
-                params: {
-                    id: this.selected.id
-                }
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'AziendaUpdate',
+            params: this.params
+        })
     }
 
     onDelete(e) {

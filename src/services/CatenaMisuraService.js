@@ -1,10 +1,10 @@
 import RestService from './RestService.js';
 
-export default class DominioService extends RestService{
+export default class CatenaMisuraService extends RestService{
 
     constructor({uri,idLab}){
         super();
-        this.url += `${uri}/domini`;
+        this.url += `${uri}/catene`;
         this.idLab = idLab;
     }
 
@@ -16,12 +16,12 @@ export default class DominioService extends RestService{
         return await this._getJsonData(`${this.url}/${id}`);
     }
     
-    async create(dominio) {
-        return await this._postJsonData(this.url, dominio);
+    async create(catena) {
+        return await this._postJsonData(this.url, catena);
     }
 
-    async update(dominio) {
-        return await this._putJsonData(`${this.url}/${dominio.id}`,dominio);
+    async update(catena) {
+        return await this._putJsonData(`${this.url}/${catena.id}`,catena);
     }
 
     async delete(id) {

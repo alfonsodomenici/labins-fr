@@ -36,7 +36,6 @@ export default class FuoriServizioListView extends ApElementView {
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
         this.params = {...this.params, idApparecchiatura: this.params.id, id: this.selected.id};
-        console.log(this.params);
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         if (old) {
@@ -53,17 +52,10 @@ export default class FuoriServizioListView extends ApElementView {
     
     onViewDetail(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'FuoriServizio',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'FuoriServizio',
+            params: this.params         
+        })
     }
 
     createStyle() {

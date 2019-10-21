@@ -27,24 +27,16 @@ export default class ApparecchiaturaView extends ApElementView {
 
     onUpdate(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'ApparecchiaturaUpdate',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'ApparecchiaturaUpdate',
+            params: this.params
+        })
     }
 
     onDocumentoView(e, doc) {
         e.preventDefault();
         this.service.downloadDocumento(this.params.id, doc.id)
             .then(blob => {
-                console.dir(blob)
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
                 a.href = url;
@@ -61,77 +53,41 @@ export default class ApparecchiaturaView extends ApElementView {
 
     onStorico(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'FuoriServizioList',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'FuoriServizioList',
+            params: this.params
+        })
     }
 
     onFuoriServizio(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'FuoriServizioCreate',
-                params: {...this.params, view: 'fs'}
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'FuoriServizioCreate',
+            params: { ...this.params, view: 'fs' }
+        })
     }
 
     onDeroga(e) {
-        e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'DerogaCreate',
-                params: this.params
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'DerogaCreate',
+            params: this.params
+        })
     }
 
     onVerificaIntermedia(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'FuoriServizioCreate',
-                params: {...this.params, view: 'vi'}
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'FuoriServizioCreate',
+            params: { ...this.params, view: 'vi' }
+        })
     }
-    
+
     onInServizio(e) {
         e.preventDefault();
-        const event = new CustomEvent(
-            'ap-navigation', {
-            detail: {
-                link: 'FuoriServizioCreate',
-                params: {...this.params, view: 'ris'}
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        this.dispatchEvent(event);
+        this.fireApNavigationEvent({
+            link: 'FuoriServizioCreate',
+            params: { ...this.params, view: 'ris' }
+        })
     }
 
     checkUpdateDisabled() {
@@ -371,7 +327,7 @@ export default class ApparecchiaturaView extends ApElementView {
                         <div class="pure-u-1 group-view">
                             <label>
                                 <span class="label">Taratore</span>
-                                <span class="content">${this.data.gestioneTaratura.azienda ? this.data.gestioneTaratura.azienda.denominazione : '' }</span>
+                                <span class="content">${this.data.gestioneTaratura.azienda ? this.data.gestioneTaratura.azienda.denominazione : ''}</span>
                             </label>
                         </div>
                     </div>
