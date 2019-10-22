@@ -22,7 +22,6 @@ export default class DominioCrudView extends ApElementView {
             this.data = {};
             this.changeView();
         }
-
     }
 
     onsave(e) {

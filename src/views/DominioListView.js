@@ -26,7 +26,7 @@ export default class DominioListView extends ApElementView {
         e.preventDefault();
         this.fireApNavigationEvent({
             link: 'DominioCrud',
-            params: this.params
+            params: { uri: this.params.uri, suburi: this.params.suburi }
         })
     }
 
@@ -34,7 +34,7 @@ export default class DominioListView extends ApElementView {
         e.preventDefault();
         this.fireApNavigationEvent({
             link: 'DominioCrud',
-            params: { ...this.params, id: this.selected.id }
+            params: this.params
         })
     }
 

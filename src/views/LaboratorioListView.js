@@ -44,16 +44,16 @@ export default class LaboratorioListView extends ApElementView {
     onCreate(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
-            link: 'LaboratorioCreate',
-            params: this.params
+            link: 'LaboratorioCrud',
+            params: {}
         })
     }
 
     onUpdate(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
-            link: 'LaboratorioUpdate',
-            params: this.params
+            link: 'LaboratorioCrud',
+            params: { id: this.params.id }
         })
     }
 

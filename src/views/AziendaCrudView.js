@@ -1,26 +1,39 @@
 import ApElementView from "./../ApElementView.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
-import LaboratorioService from "./../services/AziendaService.js";
 import AziendaService from "./../services/AziendaService.js";
 
-export default class AziendaCreateView extends ApElementView {
+export default class AziendaCrudView extends ApElementView {
 
-    constructor() {
-        super({});
+    constructor(params) {
+        super(params);
         this.service = new AziendaService();
+        this.update = params.id !== undefined;
     }
 
     connectedCallback() {
-        this.changeView();
+        if (this.update === true) {
+            this.service.find(this.params.id)
+                .then(json => {
+                    this.data = json;
+                    this.changeView();
+                    this.dataToUi(this.data);
+                })
+        } else {
+            this.data = {};
+            this.changeView();
+        }
     }
 
     onsave(e) {
         e.preventDefault();
-        const entity = {};
-        this.uiToData(entity);
-        this.service.create(entity)
-            .then(msg => console.log(msg));
-
+        this.uiToData(this.data);
+        if (this.update === true) {
+            this.service.update(this.data)
+                .then(msg => console.log(msg));
+        } else {
+            this.service.create(this.data)
+                .then(msg => console.log(msg));
+        }
     }
 
 
@@ -94,4 +107,4 @@ export default class AziendaCreateView extends ApElementView {
 
 
 }
-customElements.define('azienda-create', AziendaCreateView);
+customElements.define('azienda-crud', AziendaCrudView);

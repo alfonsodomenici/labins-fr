@@ -2,26 +2,38 @@ import ApElementView from "./../ApElementView.js";
 import { html } from "./../../node_modules/lit-html/lit-html.js"
 import LaboratorioService from "./../services/LaboratorioService.js";
 
-export default class LaboratorioCreateView extends ApElementView {
+export default class LaboratorioCrudView extends ApElementView {
 
-    constructor() {
-        super({});
+    constructor(params) {
+        super(params);
         this.service = new LaboratorioService();
+        this.update = params.id !== undefined;
     }
 
     connectedCallback() {
-        this.changeView();
-        this.dataToUi();
+        if (this.update === true) {
+            this.service.find(this.params.id)
+                .then(json => {
+                    this.data = json;
+                    this.changeView();
+                    this.dataToUi(this.data);
+                })
+        } else {
+            this.data = {};
+            this.changeView();
+        }
     }
 
     onsave(e) {
         e.preventDefault();
-        const inputs = this.fields.filter(v => v instanceof HTMLInputElement)
-        const entity = {};
-        this.uiToData(entity);
-        this.service.create(entity)
-            .then(msg => console.log(msg));
-
+        this.uiToData(this.data);
+        if (this.update === true) {
+            this.service.update(this.data)
+                .then(msg => console.log(msg));
+        } else {
+            this.service.create(this.data)
+                .then(msg => console.log(msg));
+        }
     }
 
 
@@ -45,4 +57,4 @@ export default class LaboratorioCreateView extends ApElementView {
 
 
 }
-customElements.define('laboratorio-create', LaboratorioCreateView);
+customElements.define('laboratorio-crud', LaboratorioCrudView);

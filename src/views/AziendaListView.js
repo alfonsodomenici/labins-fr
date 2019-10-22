@@ -58,15 +58,15 @@ export default class AziendaListView extends ApElementView {
     onCreate(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
-            link: 'AziendaCreate',
-            params: this.params
+            link: 'AziendaCrud',
+            params: {uri: this.params.uri}
         })
     }
 
     onUpdate(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
-            link: 'AziendaUpdate',
+            link: 'AziendaCrud',
             params: this.params
         })
     }
