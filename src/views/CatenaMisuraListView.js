@@ -56,6 +56,23 @@ export default class CatenaMisuraListView extends ApElementView {
             old.classList.toggle('selected');
         }
         selRow.classList.toggle('selected');
+        this.changeView();
+    }
+
+    /**
+     * permission
+     */
+
+    checkCreateDisabled() {
+        return ``;
+    }
+
+    checkUpdateDisabled() {
+        return this.selected ? `` : ` pure-button-disabled`;
+    }
+
+    checkDeleteDisabled() {
+        return this.selected ? `` : ` pure-button-disabled`;
     }
 
     createView() {
@@ -78,9 +95,9 @@ export default class CatenaMisuraListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td >
-                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>
-                        <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modifica</button>
-                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>
+                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary ${this.checkCreateDisabled()}'>Crea</button>
+                        <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary ${this.checkUpdateDisabled()}'>Modifica</button>
+                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary ${this.checkDeleteDisabled()}'>Elimina</button>
                     </td>
                 </tr>
             </tfoot>

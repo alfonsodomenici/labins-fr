@@ -33,6 +33,7 @@ export default class LaboratorioListView extends ApElementView {
             old.classList.toggle('selected');
         }
         selRow.classList.toggle('selected');
+        this.changeView();
     }
 
     onPageChange(e) {
@@ -81,6 +82,30 @@ export default class LaboratorioListView extends ApElementView {
         });
     }
 
+    /**
+     * permission
+     */
+
+    checkCreateDisabled() {
+        return ``;
+    }
+
+    checkUpdateDisabled() {
+        return this.selected ? `` : ` pure-button-disabled`;
+    }
+
+    checkDeleteDisabled() {
+        return this.selected ? `` : ` pure-button-disabled`;
+    }
+
+    checkApparecchiatureDisabled() {
+        return this.selected ? `` : ` pure-button-disabled`;
+    }
+
+    checkDominiDisabled() {
+        return this.selected ? `` : ` pure-button-disabled`;
+    }
+
     createStyle() {
         return html`
             tbody > tr:hover{
@@ -113,11 +138,11 @@ export default class LaboratorioListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td >
-                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>
-                        <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modifica</button>
-                        <button  @click=${e => this.onViewApparecchiature(e)} class='pure-button pure-button-primary'>Apparecchiature</button>
-                        <button  @click=${e => this.onViewDomini(e)} class='pure-button pure-button-primary'>Domini</button>
-                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>
+                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary ${this.checkCreateDisabled()}'>Crea</button>
+                        <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary ${this.checkUpdateDisabled()}'>Modifica</button>
+                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary ${this.checkDeleteDisabled()}'>Elimina</button>
+                        <button  @click=${e => this.onViewApparecchiature(e)} class='pure-button pure-button-primary ${this.checkApparecchiatureDisabled()}'>Apparecchiature</button>
+                        <button  @click=${e => this.onViewDomini(e)} class='pure-button pure-button-primary ${this.checkDominiDisabled()}'>Domini</button>
                     </td>
                 </tr>
             </tfoot>
