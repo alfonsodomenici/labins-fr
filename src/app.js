@@ -3,8 +3,7 @@ import ApBreadcrumb from './ApBreadcrumb.js';
 import ApRoute from './ApRoute.js';
 import ApGrowl from './ApGrowl.js';
 import ApAjaxStatus from './ApAjaxStatus.js';
-import ApNavVertical from './ApNavVertical.js';
-
+import ApMenu from "./models/ApMenu.js";
 
 const menuLink = document.querySelector('#menuLink');
 const nav = document.querySelector('nav');
@@ -13,19 +12,20 @@ const mediaQueryList = window.matchMedia("screen and (min-width: 40em)");
 menuLink.addEventListener('click', e => {
     e.preventDefault();
     if (mediaQueryList.matches) {
-        if (main.classList.contains('main-untoggle')) {
-            nav.classList.toggle('nav-untoggle');
-            main.classList.toggle('main-untoggle');
-        }
+        nav.classList.remove('nav-untoggle');
+        main.classList.remove('main-untoggle');
         nav.classList.toggle('nav-toggle');
         main.classList.toggle('main-toggle');
     } else {
-        if (main.classList.contains('main-toggle')) {
-            nav.classList.toggle('nav-toggle');
-            main.classList.toggle('main-toggle');
-        }
+        nav.classList.remove('nav-toggle');
+        main.classList.remove('main-toggle');
         nav.classList.toggle('nav-untoggle');
         main.classList.toggle('main-untoggle');
     }
-
 });
+
+customElements.whenDefined('ap-nav')
+    .then(_ => {
+        const apNav = document.querySelector('ap-nav');
+        apNav.menu = ApMenu.menu;
+    })

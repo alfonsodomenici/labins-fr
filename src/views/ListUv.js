@@ -2,7 +2,6 @@ import UvService from "../UvService.js";
 import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import SearchUv from "../views/SearchUv.js";
 import Paginator from "./../Paginator.js";
-import DateFunction from "./../DateFunction.js"
 
 export default class ListUv extends HTMLElement {
 
@@ -66,7 +65,7 @@ export default class ListUv extends HTMLElement {
     createRow({ data_solare, uvi_previsto, uvi_misurato, ozono_previsto, sza }) {
         return html`
             <tr>
-                <td>${data_solare.dayOfMonth}/${data_solare.monthValue}/${data_solare.year} ${data_solare.hour}:${DateFunction.numbers(data_solare.minute)}</td>
+                <td>${data_solare.dayOfMonth}/${data_solare.monthValue}/${data_solare.year} ${data_solare.hour}:${ApDate.numbers(data_solare.minute)}</td>
                 <td>${uvi_previsto.toFixed(2)}</td>
                 <td>${uvi_misurato.toFixed(2)}</td>
                 <td>${ozono_previsto.toFixed(2)}</td>

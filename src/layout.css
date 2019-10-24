@@ -61,7 +61,7 @@
 }
 
 header{
-    background: lightcyan;
+    /* background: lightcyan; */
     grid-area: header;
     /*
     display: flex;
@@ -71,18 +71,22 @@ header{
 }
 
 nav{
-    background: lightgoldenrodyellow;
+    /* background: lightgoldenrodyellow; */
     grid-area: nav;
 }
 
 article{
-    background: lightgreen;
+    /* background: lightgreen; */
     padding: 2em;
     grid-area: content;
 }
 
 footer{
-    background: lightblue;
+    /* background: lightblue; */
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content: center;
     grid-area: footer;
 }
 

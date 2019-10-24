@@ -1,7 +1,7 @@
-export default class DateFunction {
+export default class ApDate {
 
     static standard(d) {
-        return `${d.getFullYear()}-${DateFunction.numbers(d.getMonth()+1)}-${DateFunction.numbers(d.getDate())}`;
+        return `${d.getFullYear()}-${ApDate.numbers(d.getMonth()+1)}-${ApDate.numbers(d.getDate())}`;
     }
 
     static numbers(n) {

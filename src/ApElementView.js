@@ -1,6 +1,6 @@
 import ApElement from "./ApElement.js";
 import { html } from "./../node_modules/lit-html/lit-html.js";
-import DateFunction from "./DateFunction.js";
+import ApDate from "./ApDate.js";
 
 export default class ApElementView extends ApElement {
 
@@ -119,7 +119,7 @@ export default class ApElementView extends ApElement {
         if (!select) {
             return null;
         }
-        return select.value ? DateFunction.isNumeric(select.value) ? { id: Number(select.value) } : select.value : null;
+        return select.value ? ApDate.isNumeric(select.value) ? { id: Number(select.value) } : select.value : null;
     }
 
     writeSelectValue(select, value) {
