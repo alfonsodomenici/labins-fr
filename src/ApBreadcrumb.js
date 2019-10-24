@@ -30,6 +30,11 @@ export default class ApBreadcrumb extends ApElement {
     createStyle() {
         return html`
             ul.breadcrumb {
+                margin-top: 0;
+                margin-bottom: 1em;
+                margin-left: 0;
+                margin-right: 0;
+                font-size: .8em;
                 padding: 10px 16px;
                 list-style: none;
                 background-color: #eee;
@@ -39,6 +44,7 @@ export default class ApBreadcrumb extends ApElement {
                 font-size: 18px;
             }
             ul.breadcrumb li a {
+                font-size: .8em;
                 color: #0275d8;
                 text-decoration: none;
             }

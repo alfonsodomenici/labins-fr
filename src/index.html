@@ -15,19 +15,25 @@
     <ap-ajaxstatus></ap-ajaxstatus>
     <ap-growl></ap-growl>
     <main>
-        <header class="main">
+        <header>
+            <a href="#menu" id="menuLink" class="menu-link">
+                <!-- Hamburger icon -->
+                <span></span>
+            </a>
             <h2>LAB-INS</h2>
             <ap-breadcrumb>...</ap-breadcrumb>
         </header>
-        <nav class="main">
+        <nav>
             <ap-nav>
                 <a href="#LaboratorioList">Laboratori</a>
                 <a href="#UtenteList">Utenti</a>
                 <a href="#AziendaList">Aziende</a>
             </ap-nav>
         </nav>
-        <ap-route></ap-route>
-        <footer class="main">pie di pagina</a></footer>
+        <article>
+            <ap-route></ap-route>
+        </article>
+        <footer> <small>copyright Arpa Ivrea 2019</small></footer>
     </main>
     <script src="app.js" type="module"></script>
 </body>

@@ -39,3 +39,7 @@ a{
     /*visibility: hidden;*/
     display: none;
   }
+
+small{
+    font-size: 0.5em;
+}
