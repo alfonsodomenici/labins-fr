@@ -45,6 +45,12 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
             this.documenti = values[7].documenti;
             this.taratura = this.data.taratura;
             this.manutenzione = this.data.manutenzione;
+            this.tipoGestioneTaratura = this.data.taratura ?
+                this.data.gestioneTaratura.tipo.id
+                : 0;
+            this.tipoGestioneManutenzione = this.data.manutenzione ?
+                this.data.gestioneManutenzione.tipo.id
+                : 0;
             this.changeView();
             this.dataToUi(this.data);
         }
@@ -92,6 +98,16 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
         } else {
             this.uploads = this.uploads.filter(v => v.id !== id);
         }
+        this.changeView();
+    }
+
+    onTipoGestioneTaraturaChange(e) {
+        this.tipoGestioneTaratura = this.readSelectValue(e.path[0]).id;
+        this.changeView();
+    }
+
+    onTipoGestioneManutenzioneChange(e) {
+        this.tipoGestioneManutenzione = this.readSelectValue(e.path[0]).id;
         this.changeView();
     }
 
@@ -278,38 +294,93 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                     <div class="pure-g">
                         <div class="pure-u-1">
                             <label for="tipo">Tipo</label>
-                            <select id="tipo" data-bind="gestioneTaratura.tipo" class="pure-input-1-2">
+                            <select id="tipo" @change=${e => this.onTipoGestioneTaraturaChange(e)} data-bind="gestioneTaratura.tipo" class="pure-input-1-2">
                                 <option value="0">Temporale</option>
                                 <option value="1">Descrittiva</option>
                                 <option value="2">Prima dell'uso</option>
                             </select>
                         </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="dataPianificata">Data pianificata</label>
-                            <input id="dataPianificata" data-bind="gestioneTaratura.dataPianificata" class="pure-u-23-24" type="date">
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="frequenza">Frequenza in gg</label>
-                            <input id="frequenza" data-bind="gestioneTaratura.freq" class="pure-u-23-24" type="number" min="1">
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="descrizione">Descrizione</label>
-                            <input id="descrizione" data-bind="gestioneTaratura.descrizione" class="pure-u-23-24" type="text">
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="attivita">Attivita</label>
-                            <input id="attivita" data-bind="gestioneTaratura.attivita" class="pure-u-23-24" type="text">
-                        </div>
+
+                        ${this.createTaraturaTemporaleView()}
+
+                        ${this.createTaraturaDescrittivaView()}
+ 
+                        ${this.createTaraturaPrimaUsoView()}
+
                         <div class="pure-u-1">
                             <label for="taratore">Taratore</label>
                             <select id="taratore" data-bind="gestioneTaratura.azienda" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.aziende.filter(v => v.taratore).map(v => this.renderOptions(v))}
                             </select>
                         </div>
                     </div>
                 </fieldset>
             </div>
         `;
+    }
+
+    createTaraturaTemporaleView() {
+        if (this.tipoGestioneTaratura === 0) {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="dataPianificata">Data pianificata</label>
+                <input id="dataPianificata" data-bind="gestioneTaratura.dataPianificata" class="pure-u-23-24"  type="date" required>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="frequenza">Frequenza in gg</label>
+                <input id="frequenza" data-bind="gestioneTaratura.freq" class="pure-u-23-24" type="number" min="1" required>
+            </div>
+            `;
+        } else {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="dataPianificata">Data pianificata</label>
+                <input id="dataPianificata" data-bind="gestioneTaratura.dataPianificata" class="pure-u-23-24"  type="date" disabled>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="frequenza">Frequenza in gg</label>
+                <input id="frequenza" data-bind="gestioneTaratura.freq" class="pure-u-23-24" type="number" min="1" disabled>
+            </div>
+            `;
+        }
+    }
+
+    createTaraturaDescrittivaView() {
+        if (this.tipoGestioneTaratura === 1) {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="descrizione">Descrizione</label>
+                <input id="descrizione" data-bind="gestioneTaratura.descrizione" class="pure-u-23-24" type="text" required>
+            </div>
+            `;
+        } else {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="descrizione">Descrizione</label>
+                <input id="descrizione" data-bind="gestioneTaratura.descrizione" class="pure-u-23-24" type="text" disabled>
+            </div>
+            `;
+        }
+
+    }
+
+    createTaraturaPrimaUsoView() {
+        if (this.tipoGestioneTaratura === 2) {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="attivita">Attivita</label>
+                <input id="attivita" data-bind="gestioneTaratura.attivita" class="pure-u-23-24" type="text" required>
+            </div>
+            `;
+        } else {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="attivita">Attivita</label>
+                <input id="attivita" data-bind="gestioneTaratura.attivita" class="pure-u-23-24" type="text" disabled>
+            </div>
+            `;
+        }
     }
 
     createManutenzioneView() {
@@ -320,38 +391,92 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                     <div class="pure-g">
                         <div class="pure-u-1">
                             <label for="tipo">Tipo</label>
-                            <select id="tipo" data-bind="gestioneManutenzione.tipo" class="pure-input-1-2">
+                            <select id="tipo" @change=${e => this.onTipoGestioneManutenzioneChange(e)} data-bind="gestioneManutenzione.tipo" class="pure-input-1-2">
                                 <option value="0">Temporale</option>
                                 <option value="1">Descrittiva</option>
                                 <option value="2">Prima dell'uso</option>
                             </select>
                         </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="dataPianificata">Data pianificata</label>
-                            <input id="dataPianificata" data-bind="gestioneManutenzione.dataPianificata" class="pure-u-23-24" type="date">
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="frequenza">Frequenza in gg</label>
-                            <input id="frequenza" data-bind="gestioneManutenzione.freq" class="pure-u-23-24" type="number" min="1">
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="descrizione">Descrizione</label>
-                            <input id="descrizione" data-bind="gestioneManutenzione.descrizione" class="pure-u-23-24" type="text">
-                        </div>
-                        <div class="pure-u-1 pure-u-md-1-2">
-                            <label for="attivita">Attivita</label>
-                            <input id="attivita" data-bind="gestioneManutenzione.attivita" class="pure-u-23-24" type="text">
-                        </div>
+                        
+                        ${this.createManutenzioneTemporaleView()}
+
+                        ${this.createManutenzioneDescrittivaView()}
+
+                        ${this.createManutenzionePrimaUsoView()}
+                        
                         <div class="pure-u-1">
                             <label for="taratore">Manutentore</label>
                             <select id="taratore" data-bind="gestioneManutenzione.azienda" class="pure-input-1-2">
                                 <option value="-1"></option>
+                                ${this.aziende.filter(v => v.manutentore).map(v => this.renderOptions(v))}
                             </select>
                         </div>
                     </div>
                 </fieldset>
             </div>
         `;
+    }
+    createManutenzioneTemporaleView() {
+        if (this.tipoGestioneManutenzione === 0) {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="dataPianificata">Data pianificata</label>
+                <input id="dataPianificata" data-bind="gestioneManutenzione.dataPianificata" class="pure-u-23-24"  type="date" required>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="frequenza">Frequenza in gg</label>
+                <input id="frequenza" data-bind="gestioneManutenzione.freq" class="pure-u-23-24" type="number" min="1" required>
+            </div>
+            `;
+        } else {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="dataPianificata">Data pianificata</label>
+                <input id="dataPianificata" data-bind="gestioneManutenzione.dataPianificata" class="pure-u-23-24"  type="date" disabled>
+            </div>
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="frequenza">Frequenza in gg</label>
+                <input id="frequenza" data-bind="gestioneManutenzione.freq" class="pure-u-23-24" type="number" min="1" disabled>
+            </div>
+            `;
+        }
+    }
+
+    createManutenzioneDescrittivaView() {
+        if (this.tipoGestioneManutenzione === 1) {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="descrizione">Descrizione</label>
+                <input id="descrizione" data-bind="gestioneManutenzione.descrizione" class="pure-u-23-24" type="text" required>
+            </div>
+            `;
+        } else {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="descrizione">Descrizione</label>
+                <input id="descrizione" data-bind="gestioneManutenzione.descrizione" class="pure-u-23-24" type="text" disabled>
+            </div>
+            `;
+        }
+
+    }
+
+    createManutenzionePrimaUsoView() {
+        if (this.tipoGestioneManutenzione === 2) {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="attivita">Attivita</label>
+                <input id="attivita" data-bind="gestioneManutenzione.attivita" class="pure-u-23-24" type="text" required>
+            </div>
+            `;
+        } else {
+            return html`
+            <div class="pure-u-1 pure-u-md-1-2">
+                <label for="attivita">Attivita</label>
+                <input id="attivita" data-bind="gestioneManutenzione.attivita" class="pure-u-23-24" type="text" disabled>
+            </div>
+            `;
+        }
     }
 
     createDocumentiView() {

@@ -23,4 +23,6 @@ export default class Apparecchiatura {
     isGestita() {
         return this.taratura === true || this.manutenzione === true;
     }
+
+
 }

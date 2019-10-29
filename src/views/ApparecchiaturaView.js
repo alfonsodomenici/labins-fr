@@ -63,7 +63,7 @@ export default class ApparecchiaturaView extends ApElementView {
         e.preventDefault();
         this.fireApNavigationEvent({
             link: 'FuoriServizioCreate',
-            params: { ...this.params, view: 'fs' }
+            params: this.params
         })
     }
 
@@ -77,16 +77,16 @@ export default class ApparecchiaturaView extends ApElementView {
     onVerificaIntermedia(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
-            link: 'FuoriServizioCreate',
-            params: { ...this.params, view: 'vi' }
+            link: 'VerificaIntermediaCreate',
+            params: this.params
         })
     }
 
     onInServizio(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
-            link: 'FuoriServizioCreate',
-            params: { ...this.params, view: 'ris' }
+            link: 'FuoriServizioUpdate',
+            params: this.params
         })
     }
 
