@@ -1,16 +1,17 @@
 import { html, render } from "./../../node_modules/lit-html/lit-html.js";
 import ApElementView from './ApElementView.js'
 
-export default class ApNav extends ApElementView {
+export default class ApAppBar extends ApElementView {
 
     constructor() {
         super();
         this.activeLink = null;
-        this._menu = {};
+        this._appBar = {};
     }
 
+
     connectedCallback() {
-        window.addEventListener('hashchange', e => this.onNavigation(e));
+        
     }
 
     onLinkClicked(e) {
@@ -43,13 +44,13 @@ export default class ApNav extends ApElementView {
         this.activeLink.parentElement.classList.toggle('pure-menu-selected');
     }
 
-    set menu(value) {
-        this._menu = value;
+    set appBar(value) {
+        this._appBar = value;
         this.changeView();
     }
 
-    get menu() {
-        return this._menu;
+    get appBar() {
+        return this._appBar;
     }
 
     createMenuItem({ type, url, label, icon, params, external }) {
@@ -60,9 +61,10 @@ export default class ApNav extends ApElementView {
 
     createView() {
         return html`
-            <div class="pure-menu">
+            <div class="pure-menu pure-menu-horizontal">
+                <a href="#" class="pure-menu-heading pure-menu-link">${this.appBar.title}</a>
                 <ul class="pure-menu-list">
-                    ${this.menu.map(e => this.createMenuItem(e))}
+                    ${this._appBar.menu.map(e => this.createMenuItem(e))}
                 </ul>
             </div>
         `;
@@ -74,4 +76,4 @@ export default class ApNav extends ApElementView {
         `;
     }
 }
-customElements.define('ap-nav', ApNav);
+customElements.define('ap-appbar', ApAppBar);

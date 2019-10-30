@@ -72,19 +72,19 @@ export default class DominioListView extends ApElementView {
      */
 
     checkCreateDisabled() {
-        return ``;
+        return false;
     }
 
     checkUpdateDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     checkDeleteDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     checkCateneMisuraDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     createView() {
@@ -107,10 +107,22 @@ export default class DominioListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td >
-                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary ${this.checkCreateDisabled()}'>Crea</button>
-                        <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary ${this.checkUpdateDisabled()}'>Modifica</button>
-                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary ${this.checkDeleteDisabled()}'>Elimina</button>
-                        <button  @click=${e => this.onViewCateneMisura(e)} class='pure-button pure-button-primary ${this.checkCateneMisuraDisabled()}'>Catene Misura</button>
+                        ${this.checkCreateDisabled() ? 
+                            html`<button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary' disabled>Crea</button>`:
+                            html`<button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>`
+                        }
+                        ${this.checkUpdateDisabled() ? 
+                            html`<button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary' disabled>Modifica</button>`:
+                            html`<button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modifica</button>`
+                        }
+                        ${this.checkDeleteDisabled() ? 
+                            html`<button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary' disabled>Elimina</button>`:
+                            html`<button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>`
+                        }
+                        ${this.checkCateneMisuraDisabled() ? 
+                            html`<button  @click=${e => this.onViewCateneMisura(e)} class='pure-button pure-button-primary' disabled>Catene Misura</button>`:
+                            html`<button  @click=${e => this.onViewCateneMisura(e)} class='pure-button pure-button-primary'>Catene Misura</button>`
+                        }
                     </td>
                 </tr>
             </tfoot>

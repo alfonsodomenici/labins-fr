@@ -63,11 +63,6 @@
 header{
     /* background: lightcyan; */
     grid-area: header;
-    /*
-    display: flex;
-    align-items:center;
-    justify-content: space-between;
-    */
 }
 
 nav{
@@ -90,7 +85,12 @@ footer{
     grid-area: footer;
 }
 
+ap-appbar{
+    margin-top: 3px;
+    padding-left: 5em;
+}
 .menu-link {
+    position: absolute;
     display: block;
     /* show this only on small screens */
     top: 0;

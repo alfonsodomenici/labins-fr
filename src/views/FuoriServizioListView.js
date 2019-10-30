@@ -8,7 +8,7 @@ export default class FuoriServizioListView extends ApElementView {
 
     constructor(params) {
         super(JSON.parse(JSON.stringify(params)));
-        this.service = new FuoriServizioService({uri: this.params.suburi});
+        this.service = new FuoriServizioService({ uri: this.params.suburi });
         this.appService = new ApparecchiaturaService(params);
     }
 
@@ -26,22 +26,23 @@ export default class FuoriServizioListView extends ApElementView {
             this.service.search(this.criteria),
             this.appService.find(this.params.id)
         ]).then(values => {
-                this.count = values[0].size;
-                this.data = values[0].fuoriServizi;
-                this.apparecchiatura = values[1]
-                this.changeView();
-            });
+            this.count = values[0].size;
+            this.data = values[0].fuoriServizi;
+            this.apparecchiatura = values[1]
+            this.changeView();
+        });
     }
 
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
-        this.params = {...this.params, idApparecchiatura: this.params.id, id: this.selected.id};
+        this.params = { ...this.params, idApparecchiatura: this.params.id, id: this.selected.id };
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         if (old) {
             old.classList.toggle('selected');
         }
         selRow.classList.toggle('selected');
+        this.changeView();
     }
 
     onPageChange(e) {
@@ -49,13 +50,21 @@ export default class FuoriServizioListView extends ApElementView {
         this.criteria.start = this.criteria.pageSize * currentPage;
         this.loadData();
     }
-    
+
     onViewDetail(e) {
         e.preventDefault();
         this.fireApNavigationEvent({
             link: 'FuoriServizio',
-            params: this.params         
+            params: this.params
         })
+    }
+
+    /**
+     * permission
+     */
+
+    checkDettagliDisabled() {
+        return this.selected === undefined;
     }
 
     createStyle() {
@@ -113,7 +122,11 @@ export default class FuoriServizioListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td colspan="2">
-                    <button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary'>Dettagli</button>
+                        ${this.checkDettagliDisabled() ? 
+                            html`<button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary' disabled>Dettagli</button>`:
+                            html`<button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary'>Dettagli</button>`
+                        }
+                    
                     </td>
                 </tr>
             </tfoot>

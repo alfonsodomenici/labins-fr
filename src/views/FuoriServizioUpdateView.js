@@ -64,7 +64,7 @@ export default class FuoriServizioUpdateView extends ApElementView {
 
     onFineChange(e) {
         console.log('validate fine..');
-        const elFine = e.path[0];
+        const elFine = e.composedPath()[0];
         const elInizio = this.fields.filter(v => v.getAttribute('data-bind') === 'inizio')[0];
         if (this.readInputValue(elInizio) >= this.readInputValue(elFine)) {
             elFine.setCustomValidity("La data deve essere successiva alla data di Inizio Fuori servizio");
@@ -80,7 +80,7 @@ export default class FuoriServizioUpdateView extends ApElementView {
     }
 
     onRisChange(e){
-        const el = e.path[0];
+        const el = e.composedPath()[0];
         this.ris = this.readInputValue(el);
         this.changeView();
     }

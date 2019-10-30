@@ -90,7 +90,6 @@ export default class VerificaIntermediaCreateView extends ApElementView {
                     <div class="pure-u-1 pure-u-md-1-2">
                             <label for="esito">Esito</label>
                             <select id="esito" data-bind="esito" class="pure-input-23-24" required>
-                                <option value="-1"></option>
                                 ${this.esitoOptions.map(v => this.renderOptions(v))}
                             </select>
                     </div>
@@ -98,7 +97,6 @@ export default class VerificaIntermediaCreateView extends ApElementView {
                     <div class="pure-u-1 pure-u-md-1-2">
                         <label for="azienda">Taratore/Distributore</label>
                         <select id="azienda" data-bind="azienda" class="pure-input-1-2" required>
-                            <option value="-1"></option>
                             ${this.aziende.map(v => this.renderOptions(v))}
                         </select>
                     </div>

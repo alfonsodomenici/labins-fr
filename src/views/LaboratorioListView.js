@@ -87,23 +87,23 @@ export default class LaboratorioListView extends ApElementView {
      */
 
     checkCreateDisabled() {
-        return ``;
+        return false;
     }
 
     checkUpdateDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     checkDeleteDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     checkApparecchiatureDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     checkDominiDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     createStyle() {
@@ -138,11 +138,28 @@ export default class LaboratorioListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td >
-                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary ${this.checkCreateDisabled()}'>Crea</button>
-                        <button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary ${this.checkUpdateDisabled()}'>Modifica</button>
-                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary ${this.checkDeleteDisabled()}'>Elimina</button>
-                        <button  @click=${e => this.onViewApparecchiature(e)} class='pure-button pure-button-primary ${this.checkApparecchiatureDisabled()}'>Apparecchiature</button>
-                        <button  @click=${e => this.onViewDomini(e)} class='pure-button pure-button-primary ${this.checkDominiDisabled()}'>Domini</button>
+                        ${this.checkCreateDisabled() ? 
+                            html`<button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary' disabled>Crea</button>`:
+                            html`<button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>`
+                        }
+                        ${this.checkUpdateDisabled() ? 
+                            html`<button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary' disabled>Modifica</button>`:
+                            html`<button  @click=${e => this.onUpdate(e)} class='pure-button pure-button-primary'>Modifica</button>`
+                        }
+                        ${this.checkDeleteDisabled() ? 
+                            html`<button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary' disabled>Elimina</button>`:
+                            html`<button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>`
+                        }
+                        ${this.checkApparecchiatureDisabled() ? 
+                            html`<button  @click=${e => this.onViewApparecchiature(e)} class='pure-button pure-button-primary' disabled>Apparecchiature</button>`:
+                            html`<button  @click=${e => this.onViewApparecchiature(e)} class='pure-button pure-button-primary'>Apparecchiature</button>`
+                        }
+                        ${this.checkDominiDisabled() ? 
+                            html`<button  @click=${e => this.onViewDomini(e)} class='pure-button pure-button-primary' disabled>Domini</button>`:
+                            html`<button  @click=${e => this.onViewDomini(e)} class='pure-button pure-button-primary'>Domini</button>`
+                        }
+                        
+                        
                     </td>
                 </tr>
             </tfoot>

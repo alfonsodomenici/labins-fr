@@ -92,15 +92,15 @@ export default class ApparecchiaturaListView extends ApElementView {
      */
 
     checkCreateDisabled() {
-        return ``;
+        return false;
     }
 
     checkDettagliDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     checkDeleteDisabled() {
-        return this.selected ? `` : ` pure-button-disabled`;
+        return this.selected === undefined ;
     }
 
     createStyle() {
@@ -155,9 +155,18 @@ export default class ApparecchiaturaListView extends ApElementView {
                         </paginator-uv>
                     </td>
                     <td colspan="4">
-                        <button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary ${this.checkCreateDisabled()}'>Crea</button>
-                        <button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary ${this.checkDeleteDisabled()}'>Elimina</button>
-                        <button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary ${this.checkDettagliDisabled()}'>Dettagli</button>
+                        ${this.checkCreateDisabled() ? 
+                            html`<button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary' disabled>Crea</button>`:
+                            html`<button  @click=${e => this.onCreate(e)} class='pure-button pure-button-primary'>Crea</button>`
+                        }
+                        ${this.checkDeleteDisabled() ? 
+                            html`<button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary' disabled>Elimina</button>`:
+                            html`<button  @click=${e => this.onDelete(e)} class='pure-button pure-button-primary'>Elimina</button>`
+                        }
+                        ${this.checkDettagliDisabled() ? 
+                            html`<button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary' disabled>Dettagli</button>`:
+                            html`<button  @click=${e => this.onViewDetail(e)} class='pure-button pure-button-primary'>Dettagli</button>`
+                        }
                     </td>
                 </tr>
             </tfoot>

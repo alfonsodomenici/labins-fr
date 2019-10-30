@@ -55,12 +55,12 @@ export default class ApparecchiaturaCreateView extends ApElementView {
     }
 
     onSoggettoTaratura(e) {
-        this.taratura = e.path[0].checked;
+        this.taratura = e.composedPath()[0].checked;
         this.changeView();
     }
 
     onSoggettoManutenzione(e) {
-        this.manutenzione = e.path[0].checked;
+        this.manutenzione = e.composedPath()[0].checked;
         this.changeView();
     }
 
@@ -76,12 +76,12 @@ export default class ApparecchiaturaCreateView extends ApElementView {
     }
 
     onTipoGestioneTaraturaChange(e) {
-        this.tipoGestioneTaratura = this.readSelectValue(e.path[0]).id;
+        this.tipoGestioneTaratura = this.readSelectValue(e.composedPath()[0]).id;
         this.changeView();
     }
 
     onTipoGestioneManutenzioneChange(e) {
-        this.tipoGestioneManutenzione = this.readSelectValue(e.path[0]).id;
+        this.tipoGestioneManutenzione = this.readSelectValue(e.composedPath()[0]).id;
         this.changeView();
     }
 

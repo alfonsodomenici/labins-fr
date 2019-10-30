@@ -4,12 +4,14 @@ export default class Myi18n {
         return Reflect.get(Myi18n.messages, key);
     }
 
-    static messages = {
-        "createSuccess": "Creazione effettuata con successo",
-        "createFailed": "Creazione fallita",
-        "updateSuccess": "Aggiornamento effettuato con successo",
-        "updateFailed": "Aggiornamento fallito",
-        "deleteSuccess": "Eliminazione effettuata con successo",
-        "deleteFailed": "Eliminazione fallita",
+    static messages() {
+        return {
+            "createSuccess": "Creazione effettuata con successo",
+            "createFailed": "Creazione fallita",
+            "updateSuccess": "Aggiornamento effettuato con successo",
+            "updateFailed": "Aggiornamento fallito",
+            "deleteSuccess": "Eliminazione effettuata con successo",
+            "deleteFailed": "Eliminazione fallita",
+        };
     }
 }
