@@ -302,7 +302,7 @@ export default class ApparecchiaturaView extends ApElementView {
                 <button  @click=${e => this.onFuoriServizio(e)} class='pure-button pure-button-primary ${this.checkFuoriServizioDisabled()}'>Fuori Servizio</button>
                 <button  @click=${e => this.onDeroga(e)} class='pure-button pure-button-primary ${this.checkDerogaDisabled()}'>Deroga</button>
                 <button  @click=${e => this.onVerificaIntermedia(e)} class='pure-button pure-button-primary ${this.checkVerificaIntermediaDisabled()}'>Verifica Intermedia</button>
-                <button  @click=${e => this.onInServizio(e)} class='pure-button pure-button-primary ${this.checkRimettiInServizioDisabled()}'>Rimessa In Servizio</button>
+                <button  @click=${e => this.onInServizio(e)} class='pure-button pure-button-primary ${this.checkRimettiInServizioDisabled()}'>Gestione Fuori Servizio</button>
                 </footer>
             </article>
         `;

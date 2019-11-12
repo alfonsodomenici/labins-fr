@@ -1,19 +1,22 @@
 import Myi18n from './../Myi18n.js';
+import { keycloak } from "./../app.js";
 
 export default class RestService {
 
     constructor() {
         this.base = 'http://localhost:8080/labins/api';
         this.url = this.base;
-        this.headers = new Headers({
-            'Authorization': 'Bearer ' + 'keycloak.token'
-        });
+        this.headers = new Headers();
+        this.headers.set("Authorization", "Bearer " + keycloak.token);
         return new Proxy(this, this.handler);
     }
 
     async _getJsonData(endpoint) {
         const resp = await fetch(endpoint, {
             method: 'GET',
+            mode: 'cors',
+            cache: 'default',
+            redirect: 'follow',
             headers: this.headers
         });
         if (!resp.ok) {

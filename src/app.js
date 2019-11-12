@@ -6,6 +6,21 @@ import ApGrowl from './ApGrowl.js';
 import ApAjaxStatus from './ApAjaxStatus.js';
 import ApMenu from "./models/ApMenu.js";
 
+export var keycloak = Keycloak('./keycloak.json');
+
+keycloak.init({ onLoad: 'login-required' })
+    .success(success => {
+        console.log('login effettuata con successo');
+        console.log(success);
+        //console.log('token: '  + JSON.stringify(keycloak.tokenParsed));
+    })
+.error(error => {
+    console.log('errore nella login');
+    console.log(error);
+});
+
+
+
 const menuLink = document.querySelector('#menuLink');
 const nav = document.querySelector('nav');
 const main = document.querySelector('main');
