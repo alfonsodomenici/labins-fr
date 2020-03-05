@@ -12,7 +12,9 @@ keycloak.init({ onLoad: 'login-required' })
     .success(success => {
         console.log('login effettuata con successo');
         console.log(success);
-        //console.log('token: '  + JSON.stringify(keycloak.tokenParsed));
+        console.log('token parsed: '  + JSON.stringify(keycloak.tokenParsed));
+        console.log('----------------------------');
+        console.log(JSON.stringify(keycloak.token));
     })
 .error(error => {
     console.log('errore nella login');
