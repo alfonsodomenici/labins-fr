@@ -4,11 +4,24 @@ import { keycloak } from "./../app.js";
 export default class RestService {
 
     constructor() {
-        this.base = 'http://localhost:8080/labins/api';
+        this.base = `${this.readOrigin()}/labins/api`;
         this.url = this.base;
         this.headers = new Headers();
         this.headers.set("Authorization", "Bearer " + keycloak.token);
         return new Proxy(this, this.handler);
+    }
+
+    readOrigin() {
+        if (RestService.origin === undefined) {
+            let url = new URL(window.location.href);
+            if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+                RestService.origin = 'http://localhost:8080';
+            } else {
+                RestService.origin = url.origin;
+            }
+
+        }
+        return RestService.origin;
     }
 
     async _getJsonData(endpoint) {
