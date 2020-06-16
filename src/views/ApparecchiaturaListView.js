@@ -57,6 +57,7 @@ export default class ApparecchiaturaListView extends ApElementView {
             .then(json => {
                 this.count = json.size;
                 this.data = json.apparecchiature;
+                console.log(this.data);
                 render(this.createDataView(), this.root.querySelector('#data-container'));
             });
     }
@@ -133,6 +134,7 @@ export default class ApparecchiaturaListView extends ApElementView {
        <h1>Elenco Apparecchiature</h1>
         <table  class="pure-table pure-table-bordered">
             <thead>
+                <th>responsabile</th>
                 <th>data pianificata</th>
                 <th>modello</th>
                 <th>matricola</th>
@@ -174,9 +176,10 @@ export default class ApparecchiaturaListView extends ApElementView {
         `;
     }
 
-    createRow({ id, dataPianificata, modello, matricola, descrizione, codice, firmware, tipologia, costruttore, laboratorio, dominio }) {
+    createRow({ id, responsabile, dataPianificata, modello, matricola, descrizione, codice, firmware, tipologia, costruttore, laboratorio, dominio }) {
         return html`
             <tr row-key=${id} @click=${e => this.onRowClick(e, id)}>
+                <td>${responsabile}</td>
                 <td>${dataPianificata}</td>
                 <td>${modello}</td>
                 <td>${matricola}</td>

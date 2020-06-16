@@ -117,6 +117,12 @@ export default class ApparecchiaturaView extends ApElementView {
                 <fieldset>
                     <legend>Dati Apparecchiatura</legend>
                     <div class="pure-g">
+                        <div class="pure-u-1 pure-u-md-1 group-view">
+                            <label>
+                                <span class="label">Responsabile</span>
+                                <span class="content">${this.data.responsabile}</span>
+                            </label>
+                        </div>
                         <div class="pure-u-1 pure-u-md-1-2 group-view">
                             <label>
                                 <span class="label">Modello</span>

@@ -52,6 +52,7 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                 this.data.gestioneManutenzione.tipo.id
                 : 0;
             this.changeView();
+            console.log(this.data);
             this.dataToUi(this.data);
         }
         );
@@ -119,13 +120,17 @@ export default class ApparecchiaturaUpdateView extends ApElementView {
                     <fieldset>
                     <legend>Dati Apparecchiatura</legend>
                     <div class="pure-g">
-                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="responsabile">Responsabile</label>
+                            <input id="responsabile" data-bind="responsabile" class="pure-u-23-24" type="text">
+                        </div>
+                        <div class="pure-u-1 pure-u-md-1-3 group-view">
                             <label>
                                 <span class="label">Modello</span>
                                 <span class="content">${this.data.modello}</span>
                             </label>
                         </div>
-                        <div class="pure-u-1 pure-u-md-1-2 group-view">
+                        <div class="pure-u-1 pure-u-md-1-3 group-view">
                             <label>
                                 <span class="label">Matricola</span>
                                 <span class="content">${this.data.matricola}</span>

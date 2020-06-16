@@ -93,11 +93,15 @@ export default class ApparecchiaturaCreateView extends ApElementView {
                         <fieldset>
                             <legend>Dati Apparecchiatura</legend>
                             <div class="pure-g">
-                                <div class="pure-u-1 pure-u-md-1-2">
+                                <div class="pure-u-1 pure-u-md-1-3">
+                                    <label for="responsabile">Responsabile</label>
+                                    <input id="responsabile" data-bind="responsabile" required class="pure-u-23-24" type="text">
+                                </div>
+                                <div class="pure-u-1 pure-u-md-1-3">
                                     <label for="modello">Modello</label>
                                     <input id="modello" data-bind="modello" required class="pure-u-23-24" type="text">
                                 </div>
-                                <div class="pure-u-1 pure-u-md-1-2">
+                                <div class="pure-u-1 pure-u-md-1-3">
                                     <label for="matricola">Matricola</label>
                                     <input id="matricola" data-bind="matricola" required class="pure-u-23-24" type="text">
                                 </div>
