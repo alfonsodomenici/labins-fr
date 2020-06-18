@@ -1,7 +1,7 @@
 import FuoriServizioService from './../services/FuoriServizioService.js'
 import ApparecchiaturaService from "./../services/ApparecchiaturaService.js";
 import ApElementView from "./../ApElementView.js";
-import { html, render } from "./../../node_modules/lit-html/lit-html.js"
+import { html, render } from "./../lib/lit-html.js"
 import Paginator from "./../Paginator.js";
 
 export default class FuoriServizioListView extends ApElementView {

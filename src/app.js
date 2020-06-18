@@ -9,17 +9,17 @@ import ApMenu from "./models/ApMenu.js";
 export var keycloak = Keycloak('./keycloak.json');
 
 keycloak.init({ onLoad: 'login-required' })
-    .success(success => {
+    .then(success => {
         console.log('login effettuata con successo');
         console.log(success);
-        console.log('token parsed: '  + JSON.stringify(keycloak.tokenParsed));
+        console.log('token parsed: ' + JSON.stringify(keycloak.tokenParsed));
         console.log('----------------------------');
         console.log(JSON.stringify(keycloak.token));
     })
-.error(error => {
-    console.log('errore nella login');
-    console.log(error);
-});
+    .catch(error => {
+        console.log('errore nella login');
+        console.log(error);
+    });
 
 
 

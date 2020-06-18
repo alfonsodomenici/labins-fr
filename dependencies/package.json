@@ -9,13 +9,13 @@
   "author": "arpa",
   "license": "ISC",
   "dependencies": {
-    "lit-html": "^1.0.0"
+    "lit-html": "^1.2.1"
   },
   "devDependencies": {
-    "@pika/web": "^0.4.3"
+    "snowpack": "^2.5.2"
   },
-  "@pika/web": {
-    "webDependencies": [
+  "snowpack": {
+    "install": [
       "lit-html"
     ]
   }

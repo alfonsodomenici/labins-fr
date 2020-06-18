@@ -1,5 +1,5 @@
 import ApElementView from "./../ApElementView.js";
-import { html } from "./../../node_modules/lit-html/lit-html.js"
+import { html } from "./../lib/lit-html.js"
 
 export default class UtenteListView extends ApElementView {
 

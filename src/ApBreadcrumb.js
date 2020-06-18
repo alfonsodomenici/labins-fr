@@ -1,4 +1,4 @@
-import { html, render } from './../node_modules/lit-html/lit-html.js';
+import { html, render } from "./lib/lit-html.js"
 import ApElement from './ApElement.js';
 
 export default class ApBreadcrumb extends ApElement {

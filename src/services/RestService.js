@@ -1,5 +1,6 @@
 import Myi18n from './../Myi18n.js';
 import { keycloak } from "./../app.js";
+import {isTokenValid} from "./../jwt.js";
 
 export default class RestService {
 
@@ -8,7 +9,57 @@ export default class RestService {
         this.url = this.base;
         this.headers = new Headers();
         this.headers.set("Authorization", "Bearer " + keycloak.token);
+        this.handler = {
+            get(target, propKey, receiver) {
+                if (typeof target[propKey] !== 'function') {
+                    return target[propKey];
+                }
+                const origMethod = target[propKey];
+                const successMsg = Myi18n.getMessage(`${propKey}Success`);
+                const failedMsg = Myi18n.getMessage(`${propKey}Failed`);
+                return async (...args) => {
+                    try {
+                        const start = performance.now();
+                        target.fireLoadDataEvent(false);
+                        await target.sleep(1000);
+                        if(!isTokenValid()){
+                            console.log('refresh token...');
+                            await keycloak.updateToken(30);
+                        }
+                        const result = await origMethod.apply(target, args);
+                        const end = performance.now();
+                        console.log(`${propKey} duration -> ${end - start}`);
+                        if (successMsg) {
+                            target.fireMessageEvent(successMsg, false);
+                        }
+                        return result;
+                    } catch (err) {
+                        console.log(`${propKey} failed...`);
+                        console.log(err);
+                        if (failedMsg) {
+                            target.fireMessageEvent(failedMsg, true);
+                        }
+                    } finally {
+                        target.fireLoadDataEvent(true);
+                    }
+                };
+
+            }
+        }
         return new Proxy(this, this.handler);
+    }
+
+    fireLoadDataEvent(end) {
+        const event = new CustomEvent(
+            'ap-loading', {
+            detail: {
+                end
+            },
+            bubbles: true,
+            composed: true
+        }
+        );
+        document.dispatchEvent(event);
     }
 
     readOrigin() {
@@ -28,12 +79,11 @@ export default class RestService {
         const resp = await fetch(endpoint, {
             method: 'GET',
             mode: 'cors',
-            cache: 'default',
-            redirect: 'follow',
             headers: this.headers
         });
+        console.log(resp);
         if (!resp.ok) {
-            throw new Error(response.statusText);
+            throw new Error(resp.statusText);
         }
         return await resp.json();
     }
@@ -44,7 +94,7 @@ export default class RestService {
             headers: this.headers
         });
         if (!resp.ok) {
-            throw new Error(response.statusText);
+            throw new Error(resp.statusText);
         }
         return await resp.blob();
     }
@@ -57,7 +107,7 @@ export default class RestService {
             body: JSON.stringify(json)
         });
         if (!resp.ok) {
-            throw new Error(response.statusText);
+            throw new Error(resp.statusText);
         }
         return await resp.json();
     }
@@ -70,7 +120,7 @@ export default class RestService {
             body: formData
         });
         if (!resp.ok) {
-            throw new Error(response.statusText);
+            throw new Error(resp.statusText);
         }
         return await resp.json();
     }
@@ -83,7 +133,7 @@ export default class RestService {
             body: JSON.stringify(json)
         });
         if (!resp.ok) {
-            throw new Error(response.statusText);
+            throw new Error(resp.statusText);
         }
         return await resp.json();
     }
@@ -95,56 +145,9 @@ export default class RestService {
             headers: this.headers
         });
         if (!resp.ok) {
-            throw new Error(response.statusText);
+            throw new Error(resp.statusText);
         }
         return resp;
-    }
-
-    handler = {
-        get(target, propKey, receiver) {
-            if (typeof target[propKey] !== 'function') {
-                return target[propKey];
-            }
-            const origMethod = target[propKey];
-            const successMsg = Myi18n.getMessage(`${propKey}Success`);
-            const failedMsg = Myi18n.getMessage(`${propKey}Failed`);
-            return async (...args) => {
-                try {
-                    const start = performance.now();
-                    target.fireLoadDataEvent(false);
-                    await target.sleep(1000);
-                    const result = await origMethod.apply(target, args);
-                    const end = performance.now();
-                    console.log(`${propKey} duration -> ${end - start}`);
-                    if (successMsg) {
-                        target.fireMessageEvent(successMsg, false);
-                    }
-                    return result;
-                } catch (err) {
-                    console.log(`${propKey} failed...`);
-                    console.log(err);
-                    if (failedMsg) {
-                        target.fireMessageEvent(failedMsg, true);
-                    }
-                } finally {
-                    target.fireLoadDataEvent(true);
-                }
-            };
-
-        }
-    }
-
-    fireLoadDataEvent(end) {
-        const event = new CustomEvent(
-            'ap-loading', {
-            detail: {
-                end
-            },
-            bubbles: true,
-            composed: true
-        }
-        );
-        document.dispatchEvent(event);
     }
 
     fireMessageEvent(message, error) {

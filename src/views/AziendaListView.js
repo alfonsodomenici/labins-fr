@@ -1,6 +1,6 @@
 import AziendaService from './../services/AziendaService.js'
 import ApElementView from "./../ApElementView.js";
-import { html, render } from "./../../node_modules/lit-html/lit-html.js"
+import { html, render } from "./../lib/lit-html.js"
 import SearchAziende from "./SearchAziende.js";
 import Paginator from "./../Paginator.js";
 

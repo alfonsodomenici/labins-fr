@@ -1,5 +1,5 @@
 import ApElementView from "./../ApElementView.js";
-import { html } from "./../../node_modules/lit-html/lit-html.js"
+import { html } from "./../lib/lit-html.js"
 import LaboratorioService from "./../services/LaboratorioService.js";
 
 export default class LaboratorioCrudView extends ApElementView {

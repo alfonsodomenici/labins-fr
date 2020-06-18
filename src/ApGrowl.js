@@ -1,5 +1,5 @@
 import ApElement from "./ApElement.js";
-import { html, render } from "./../node_modules/lit-html/lit-html.js";
+import { html, render } from "./lib/lit-html.js"
 
 export default class ApGrowl extends ApElement {
     constructor() {

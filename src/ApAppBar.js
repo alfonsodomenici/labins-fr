@@ -1,4 +1,4 @@
-import { html, render } from "./../../node_modules/lit-html/lit-html.js";
+import { html, render } from "./lib/lit-html.js"
 import ApElementView from './ApElementView.js'
 
 export default class ApAppBar extends ApElementView {
