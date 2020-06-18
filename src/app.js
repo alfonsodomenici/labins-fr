@@ -8,7 +8,10 @@ import ApMenu from "./models/ApMenu.js";
 
 export var keycloak = Keycloak('./keycloak.json');
 
-keycloak.init({ onLoad: 'login-required' })
+keycloak.init({ 
+    onLoad: 'login-required',
+    promiseType: 'native',
+    })
     .then(success => {
         console.log('login effettuata con successo');
         console.log(success);

@@ -1,7 +1,7 @@
 export default class Myi18n {
 
     static getMessage(key) {
-        return Reflect.get(Myi18n.messages, key);
+        return Reflect.get(Myi18n.messages(), key);
     }
 
     static messages() {

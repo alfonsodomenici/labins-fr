@@ -1,6 +1,5 @@
 import Myi18n from './../Myi18n.js';
 import { keycloak } from "./../app.js";
-import {isTokenValid} from "./../jwt.js";
 
 export default class RestService {
 
@@ -22,9 +21,10 @@ export default class RestService {
                         const start = performance.now();
                         target.fireLoadDataEvent(false);
                         await target.sleep(1000);
-                        if(!isTokenValid()){
-                            console.log('refresh token...');
-                            await keycloak.updateToken(30);
+                        const isTokenRefreshed = await keycloak.updateToken(30);
+                        if(isTokenRefreshed){
+                            console.log('token is refreshed...');
+                            target.headers.set("Authorization", "Bearer " + keycloak.token);
                         }
                         const result = await origMethod.apply(target, args);
                         const end = performance.now();
@@ -81,8 +81,8 @@ export default class RestService {
             mode: 'cors',
             headers: this.headers
         });
-        console.log(resp);
         if (!resp.ok) {
+            console.error('_getJsonData',resp.status,resp.statusText);
             throw new Error(resp.statusText);
         }
         return await resp.json();
@@ -94,6 +94,7 @@ export default class RestService {
             headers: this.headers
         });
         if (!resp.ok) {
+            console.error('_getBlobData',resp.status,resp.statusText);
             throw new Error(resp.statusText);
         }
         return await resp.blob();
@@ -107,6 +108,7 @@ export default class RestService {
             body: JSON.stringify(json)
         });
         if (!resp.ok) {
+            console.error('_postJsonData',resp.status,resp.statusText);
             throw new Error(resp.statusText);
         }
         return await resp.json();
@@ -120,6 +122,7 @@ export default class RestService {
             body: formData
         });
         if (!resp.ok) {
+            console.error('_postFormData',resp.status,resp.statusText);
             throw new Error(resp.statusText);
         }
         return await resp.json();
@@ -133,6 +136,7 @@ export default class RestService {
             body: JSON.stringify(json)
         });
         if (!resp.ok) {
+            console.error('_putJsonData',resp.status,resp.statusText);
             throw new Error(resp.statusText);
         }
         return await resp.json();
@@ -145,6 +149,7 @@ export default class RestService {
             headers: this.headers
         });
         if (!resp.ok) {
+            console.error('_deleteJsonData',resp.status,resp.statusText);
             throw new Error(resp.statusText);
         }
         return resp;
