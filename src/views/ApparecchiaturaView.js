@@ -2,11 +2,13 @@ import ApElementView from "./../ApElementView.js";
 import { html } from "./../lib/lit-html.js"
 import ApparecchiaturaService from "../services/ApparecchiaturaService.js";
 import FuoriServizioService from "./../services/FuoriServizioService.js";
+import Authz from './../services/Authorization.js';
 
 export default class ApparecchiaturaView extends ApElementView {
 
     constructor(params) {
         super(params);
+        this.idLab = params.idLab;
         this.service = new ApparecchiaturaService(params);
         this.fsService = new FuoriServizioService({ uri: this.params.suburi });
     }
@@ -91,22 +93,22 @@ export default class ApparecchiaturaView extends ApElementView {
     }
 
     checkUpdateDisabled() {
-        return ``;
+        return Authz.isROLab(this.idLab) ? ` pure-button-disabled` : ``;
     }
     checkStoricoDisabled() {
         return this.fsStatus.isStoricoEmpty ? ` pure-button-disabled` : ``;
     }
     checkFuoriServizioDisabled() {
-        return (this.fsStatus.isFuoriServizio) ? ` pure-button-disabled` : ``;
+        return (this.fsStatus.isFuoriServizio) || Authz.isROLab(this.idLab) ? ` pure-button-disabled` : ``;
     }
     checkDerogaDisabled() {
-        return (this.fsStatus.isFuoriServizio) ? ` pure-button-disabled` : ``;
+        return (this.fsStatus.isFuoriServizio) || Authz.isROLab(this.idLab) ? ` pure-button-disabled` : ``;
     }
     checkVerificaIntermediaDisabled() {
-        return (this.fsStatus.isFuoriServizio || !this.fsStatus.isViRequired) ? ` pure-button-disabled` : ``;
+        return (this.fsStatus.isFuoriServizio || !this.fsStatus.isViRequired) || Authz.isROLab(this.idLab) ? ` pure-button-disabled` : ``;
     }
     checkRimettiInServizioDisabled() {
-        return this.fsStatus.isFuoriServizio === false ? ` pure-button-disabled` : ``;
+        return this.fsStatus.isFuoriServizio === false || Authz.isROLab(this.idLab) ? ` pure-button-disabled` : ``;
     }
 
 

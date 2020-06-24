@@ -5,7 +5,6 @@ export default class DominioService extends RestService{
     constructor({uri,idLab}){
         super();
         this.url += `${uri}/domini`;
-        this.idLab = idLab;
     }
 
     async all() {

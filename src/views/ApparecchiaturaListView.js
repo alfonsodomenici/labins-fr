@@ -3,11 +3,13 @@ import ApElementView from "./../ApElementView.js";
 import { html, render } from "./../lib/lit-html.js"
 import SearchApparecchiature from "./SearchApparecchiature.js";
 import Paginator from "./../Paginator.js";
+import Authz from './../services/Authorization.js';
 
 export default class ApparecchiaturaListView extends ApElementView {
 
     constructor(params) {
         super(params);
+        this.idLab = params.id;
         this.service = new ApparecchiaturaService(params);
         this.criteria = {
             idDom: -1,
@@ -28,7 +30,7 @@ export default class ApparecchiaturaListView extends ApElementView {
 
     onRowClick(e, id) {
         this.selected = this.data.find(v => v.id === id);
-        this.params = { ...this.params, id: id, suburi: this.selected.link.uri };
+        this.params = { ...this.params, id: id,idLab: this.idLab, suburi: this.selected.link.uri };
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         if (old) {
@@ -93,7 +95,7 @@ export default class ApparecchiaturaListView extends ApElementView {
      */
 
     checkCreateDisabled() {
-        return false;
+        return Authz.isROLab(this.idLab);
     }
 
     checkDettagliDisabled() {
@@ -101,7 +103,7 @@ export default class ApparecchiaturaListView extends ApElementView {
     }
 
     checkDeleteDisabled() {
-        return this.selected === undefined ;
+        return this.selected === undefined || Authz.isROLab(this.idLab);
     }
 
     createStyle() {

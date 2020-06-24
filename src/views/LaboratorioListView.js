@@ -2,6 +2,7 @@ import LaboratorioService from './../services/LaboratorioService.js'
 import ApElementView from "./../ApElementView.js";
 import { html, render } from "./../lib/lit-html.js"
 import Paginator from "./../Paginator.js";
+import Authz from './../services/Authorization.js';
 
 export default class LaboratorioListView extends ApElementView {
 
@@ -28,7 +29,6 @@ export default class LaboratorioListView extends ApElementView {
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
         this.params = { ...this.params, id: id, uri: this.selected.link.uri };
-        console.log(this.params);
         if (old) {
             old.classList.toggle('selected');
         }
@@ -87,15 +87,15 @@ export default class LaboratorioListView extends ApElementView {
      */
 
     checkCreateDisabled() {
-        return false;
+        return Authz.isUser();
     }
 
     checkUpdateDisabled() {
-        return this.selected === undefined ;
+        return this.selected === undefined || Authz.isROLab(this.selected.id);
     }
 
     checkDeleteDisabled() {
-        return this.selected === undefined ;
+        return this.selected === undefined || Authz.isUser();
     }
 
     checkApparecchiatureDisabled() {

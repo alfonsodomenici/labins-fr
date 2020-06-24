@@ -12,14 +12,6 @@ export default class ApMenu {
             },
             {
                 type: 'item',
-                url: '#UtenteList',
-                label: 'Utenti',
-                icon: '',
-                params: {},
-                external: false
-            },
-            {
-                type: 'item',
                 url: '#AziendaList',
                 label: 'Aziende',
                 icon: '',

@@ -1,12 +1,15 @@
 import ApElementView from "./../ApElementView.js";
 import { html } from "./../lib/lit-html.js"
 import CatenaMisuraService from './../services/CatenaMisuraService.js';
+import Authz from './../services/Authorization.js';
 
 export default class CatenaMisuraListView extends ApElementView {
 
     constructor(params) {
         super(params);
         this.service = new CatenaMisuraService({ uri: this.params.suburi });
+        this.idLab = params.idLab;
+        this.idDominio = params.id;
     }
 
     connectedCallback() {
@@ -51,7 +54,7 @@ export default class CatenaMisuraListView extends ApElementView {
         this.selected = this.data.find(v => v.id === id);
         const old = this.root.querySelector("tr.selected");
         const selRow = this.root.querySelector(`[row-key="${id}"]`);
-        this.params = { ...this.params, id: id };
+        this.params = { ...this.params, id: id, idDominio: this.idDominio };
         if (old) {
             old.classList.toggle('selected');
         }
@@ -64,15 +67,15 @@ export default class CatenaMisuraListView extends ApElementView {
      */
 
     checkCreateDisabled() {
-        return false;
+        return Authz.isROLab(this.idLab);
     }
 
     checkUpdateDisabled() {
-        return this.selected === undefined ;
+        return this.selected === undefined || Authz.isROLab(this.idLab);
     }
 
     checkDeleteDisabled() {
-        return this.selected === undefined ;
+        return this.selected === undefined || Authz.isROLab(this.idLab);
     }
 
     createView() {
