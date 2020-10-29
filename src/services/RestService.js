@@ -78,7 +78,6 @@ export default class RestService {
     async _getJsonData(endpoint) {
         const resp = await fetch(endpoint, {
             method: 'GET',
-            mode: 'cors',
             headers: this.headers
         });
         if (!resp.ok) {

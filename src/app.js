@@ -5,6 +5,7 @@ import ApRoute from './ApRoute.js';
 import ApGrowl from './ApGrowl.js';
 import ApAjaxStatus from './ApAjaxStatus.js';
 import ApMenu from "./models/ApMenu.js";
+import AbilitazioneService from "./services/AbilitazioneService.js";
 
 export var keycloak = Keycloak('./keycloak.json');
 
@@ -18,6 +19,11 @@ keycloak.init({
         console.log('token parsed: ' + JSON.stringify(keycloak.tokenParsed));
         console.log('----------------------------');
         console.log(JSON.stringify(keycloak.token));
+        const srv = new AbilitazioneService();
+        return srv.search(keycloak.tokenParsed.upn);
+    })
+    .then(json => {
+        sessionStorage.setItem("prm",JSON.stringify(json));
     })
     .catch(error => {
         console.log('errore nella login');

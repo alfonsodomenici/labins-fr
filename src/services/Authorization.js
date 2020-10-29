@@ -16,6 +16,7 @@ export default class Authz {
     }
 
     static isROLab(id) {
-        return this._roles().find(e => e === `rolab${id}`) !== undefined;
+        const labPermission = JSON.parse(sessionStorage.getItem("prm"));
+        return labPermission.find(e => e.laboratorio.id === id && e.livello === "LETTURA") !== undefined;
     }
 }
