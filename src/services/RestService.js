@@ -4,7 +4,7 @@ import { keycloak } from "./../app.js";
 export default class RestService {
 
     constructor() {
-        this.base = `${this.readOrigin()}/labins/api`;
+        this.base = `${this.readOrigin()}/api`;
         this.url = this.base;
         this.headers = new Headers();
         this.headers.set("Authorization", "Bearer " + keycloak.token);

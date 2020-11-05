@@ -1,10 +1,10 @@
 {
   "realm": "ARPA_AD_USERS",
-  "auth-server-url": "https://kc.arpa.piemonte.it/auth",
+  "auth-server-url": "https://watson.arpa.piemonte.it/auth/",
   "ssl-required": "external",
   "resource": "labins",
   "public-client": true,
+  "verify-token-audience": true,
   "use-resource-role-mappings": true,
-  "confidential-port": 0,
-  "enable-cors": true
+  "confidential-port": 0
 }
